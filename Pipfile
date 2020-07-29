@@ -5,6 +5,9 @@ verify_ssl = true
 
 [dev-packages]
 httpie = "*"
+ipython = "*"
+pudb = "*"
+astpretty = "*"
 
 [packages]
 django = "*"
