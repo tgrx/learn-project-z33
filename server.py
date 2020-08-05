@@ -1,11 +1,12 @@
 from http.server import SimpleHTTPRequestHandler
 
 import settings
+from utils import normalize_path
 
 
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        path = self.build_path()
+        path = normalize_path(self.path)
 
         if path == "/":
             self.handle_root()
@@ -42,11 +43,3 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.send_header("Cache-control", f"max-age={settings.CACHE_AGE}")
         self.end_headers()
         self.wfile.write(message.encode())
-
-    def build_path(self) -> str:
-        result = self.path
-
-        if result[-1] != "/":
-            result = f"{result}/"
-
-        return result
