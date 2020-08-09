@@ -8,8 +8,7 @@ astpretty = "*"
 httpie = "*"
 ipython = "*"
 pudb = "*"
-pytest = "*"
-selenium = "*"
+pytest-selenium = "*"
 
 [packages]
 django = "*"
