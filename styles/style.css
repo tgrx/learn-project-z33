@@ -90,6 +90,10 @@ main {
     box-shadow: 0 0 0.5rem 0.1rem #626262;
 }
 
+.lu {
+    box-shadow: 0 0 0.5rem 0.1rem darkred;
+}
+
 .lesson {
     background-color: #112c73;
 }

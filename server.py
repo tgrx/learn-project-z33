@@ -2,6 +2,7 @@ from http.server import SimpleHTTPRequestHandler
 
 import settings
 from utils import normalize_path
+from utils import to_bytes
 
 
 class MyHttp(SimpleHTTPRequestHandler):
@@ -67,7 +68,6 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.send_header("Cache-control", f"max-age={settings.CACHE_AGE}")
         self.end_headers()
 
-        if isinstance(message, str):
-            message = message.encode()
+        payload = to_bytes(message)
 
-        self.wfile.write(message)
+        self.wfile.write(payload)
