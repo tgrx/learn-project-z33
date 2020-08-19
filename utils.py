@@ -1,5 +1,8 @@
 from typing import Union
 
+import settings
+from errors import NotFound
+
 
 def normalize_path(path: str) -> str:
     if not path:
@@ -21,4 +24,17 @@ def to_bytes(text: Union[str, bytes]) -> bytes:
         raise ValueError(f"cannot convert {type(text)} to bytes")
 
     result = text.encode()
+    return result
+
+
+def read_static(path: str) -> bytes:
+    static = settings.STATIC_DIR / path
+    if not static.is_file():
+        full_path = static.resolve().as_posix()
+        msg = f"file <{full_path}> not found"
+        raise NotFound(msg)
+
+    with static.open("rb") as fp:
+        result = fp.read()
+
     return result
