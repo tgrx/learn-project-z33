@@ -9,30 +9,60 @@ from utils import read_static
 from utils import to_bytes
 
 
+def get_path_with_file(url) -> tuple:
+    path = normalize_path(url)
+    parts = path.split("/")
+
+    try:
+        file_path = parts[2]
+    except IndexError:
+        file_path = None
+    path = normalize_path(parts[1])
+    path = f"/{path}" if path != "/" else path
+
+    return path, file_path
+
+
+def get_content_type_from_file(file_path: str) -> str:
+    if not file_path:
+        return "text/html"
+    ext = file_path.split(".")[1].lower()
+    content_type_by_extension = {
+        "gif": "image/gif",
+        "jpeg": "image/jpeg",
+        "jpg": "image/jpeg",
+        "png": "image/png",
+        "svg": "image/svg+xml",
+    }
+
+    content_type = content_type_by_extension[ext]
+    return content_type
+
+
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        path = normalize_path(self.path)
+        path, file_path = get_path_with_file(self.path)
+        content_type = get_content_type_from_file(file_path)
 
-        handlers = {
-            "/": self.handle_root,
-            "/hello/": self.handle_hello,
-            "/style/": self.handle_style,
-            "/logo/": self.handle_logo,
-            "/0/": self.handle_zde,
+        endpoints = {
+            "/": [self.handle_static, ["index.html", "text/html"]],
+            "/style/": [self.handle_static, ["styles/style.css", "text/css"]],
+
+            "/xxx/": [self.handle_static, [f"images/{file_path}", content_type]],
+
+            "/hello/": [self.handle_hello, []],
+            "/0/": [self.handle_zde, []],
         }
 
         try:
-            handler = handlers[path]
-            handler()
+            handler, args = endpoints[path]
+            handler(*args)
         except (NotFound, KeyError):
             self.handle_404()
         except MethodNotAllowed:
             self.handle_405()
         except Exception:
             self.handle_500()
-
-    def handle_root(self):
-        return super().do_GET()
 
     def handle_hello(self):
         content = f"""
@@ -50,13 +80,9 @@ class MyHttp(SimpleHTTPRequestHandler):
     def handle_zde(self):
         x = 1 / 0
 
-    def handle_style(self):
-        css = read_static("styles/style.css")
-        self.respond(css, content_type="text/css")
-
-    def handle_logo(self):
-        image = read_static("images/logo.svg")
-        self.respond(image, content_type="image/svg+xml")
+    def handle_static(self, file_path, ct):
+        content = read_static(file_path)
+        self.respond(content, content_type=ct)
 
     def handle_404(self):
         msg = """NOT FOUND!!!!!!!!"""
