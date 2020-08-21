@@ -21,7 +21,8 @@ def to_bytes(text: Union[str, bytes]) -> bytes:
         return text
 
     if not isinstance(text, str):
-        raise ValueError(f"cannot convert {type(text)} to bytes")
+        msg = f"cannot convert {type(text)} to bytes"
+        raise ValueError(msg)
 
     result = text.encode()
     return result
