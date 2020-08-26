@@ -36,7 +36,3 @@ def test_endpoint():
         assert (
             got_endpoint == expected_endpoint
         ), f"mismatch for `{path}`: expected {expected_endpoint}, got {got_endpoint}"
-
-
-if __name__ == "__main__":
-    test_endpoint()
