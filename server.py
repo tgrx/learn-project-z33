@@ -2,60 +2,29 @@ import traceback
 from http.server import SimpleHTTPRequestHandler
 
 import settings
+from custom_types import Endpoint
 from errors import MethodNotAllowed
 from errors import NotFound
-from utils import normalize_path
+from utils import get_content_type
 from utils import read_static
 from utils import to_bytes
 
 
-def get_path_with_file(url) -> tuple:
-    path = normalize_path(url)
-    parts = path.split("/")
-
-    try:
-        file_path = parts[2]
-    except IndexError:
-        file_path = None
-    path = normalize_path(parts[1])
-    path = f"/{path}" if path != "/" else path
-
-    return path, file_path
-
-
-def get_content_type_from_file(file_path: str) -> str:
-    if not file_path:
-        return "text/html"
-    ext = file_path.split(".")[1].lower()
-    content_type_by_extension = {
-        "gif": "image/gif",
-        "jpeg": "image/jpeg",
-        "jpg": "image/jpeg",
-        "png": "image/png",
-        "svg": "image/svg+xml",
-    }
-
-    content_type = content_type_by_extension[ext]
-    return content_type
-
-
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        path, file_path = get_path_with_file(self.path)
-        content_type = get_content_type_from_file(file_path)
+        endpoint = Endpoint.from_path(self.path)
+        content_type = get_content_type(endpoint.file_name)
 
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
-            "/style/": [self.handle_static, ["styles/style.css", "text/css"]],
-
-            "/xxx/": [self.handle_static, [f"images/{file_path}", content_type]],
-
-            "/hello/": [self.handle_hello, []],
             "/0/": [self.handle_zde, []],
+            "/hello/": [self.handle_hello, []],
+            "/i/": [self.handle_static, [f"images/{endpoint.file_name}", content_type]],
+            "/s/": [self.handle_static, [f"styles/{endpoint.file_name}", content_type]],
         }
 
         try:
-            handler, args = endpoints[path]
+            handler, args = endpoints[endpoint.normal]
             handler(*args)
         except (NotFound, KeyError):
             self.handle_404()
@@ -79,21 +48,22 @@ class MyHttp(SimpleHTTPRequestHandler):
 
     def handle_zde(self):
         x = 1 / 0
+        print(x)
 
-    def handle_static(self, file_path, ct):
+    def handle_static(self, file_path, content_type):
         content = read_static(file_path)
-        self.respond(content, content_type=ct)
+        self.respond(content, content_type=content_type)
 
     def handle_404(self):
-        msg = """NOT FOUND!!!!!!!!"""
-
+        msg = """CHECK YOU"""
         self.respond(msg, code=404, content_type="text/plain")
 
     def handle_405(self):
         self.respond("", code=405, content_type="text/plain")
 
     def handle_500(self):
-        self.respond(traceback.format_exc(), code=500, content_type="text/plain")
+        msg = traceback.format_exc()
+        self.respond(msg, code=500, content_type="text/plain")
 
     def respond(self, message, code=200, content_type="text/html"):
         payload = to_bytes(message)
