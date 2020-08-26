@@ -6,6 +6,7 @@ from custom_types import Endpoint
 from errors import MethodNotAllowed
 from errors import NotFound
 from utils import get_content_type
+from utils import get_name_from_qs
 from utils import read_static
 from utils import to_bytes
 
@@ -18,7 +19,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
             "/0/": [self.handle_zde, []],
-            "/hello/": [self.handle_hello, []],
+            "/hello/": [self.handle_hello, [endpoint]],
             "/i/": [self.handle_static, [f"images/{endpoint.file_name}", content_type]],
             "/s/": [self.handle_static, [f"styles/{endpoint.file_name}", content_type]],
         }
@@ -33,13 +34,23 @@ class MyHttp(SimpleHTTPRequestHandler):
         except Exception:
             self.handle_500()
 
-    def handle_hello(self):
+    def handle_hello(self, endpoint):
+        name = get_name_from_qs(endpoint.query_string)
+
         content = f"""
         <html>
         <head><title>Hello Page</title></head>
         <body>
-        <h1>Hello world!</h1>
+        <h1>Hello {name}!</h1>
+        <h1>You was born at {2020}!</h1>
         <p>path: {self.path}</p>
+        
+        <form>
+            <label for="xxx-id">Your name:</label>
+            <input type="text" name="xxx" id="xxx-id">
+            <button type="submit">Greet</button>
+        </form>
+        
         </body>
         </html>
         """

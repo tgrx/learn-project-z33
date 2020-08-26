@@ -48,3 +48,19 @@ def get_content_type(file_path: str) -> str:
         return "text/html"
     content_type, _ = mimetypes.guess_type(file_path)
     return content_type
+
+
+def get_name_from_qs(qs: str) -> str:
+    if not qs:
+        return "world"
+
+    pairs = qs.split("&")
+
+    for pair in pairs:
+        if "=" not in pair:
+            continue
+        key, value = pair.split("=")
+        if key == "xxx":
+            return value
+
+    return "world"
