@@ -2,37 +2,36 @@ import traceback
 from http.server import SimpleHTTPRequestHandler
 
 import settings
+from custom_types import Endpoint
 from errors import MethodNotAllowed
 from errors import NotFound
-from utils import normalize_path
+from utils import get_content_type
 from utils import read_static
 from utils import to_bytes
 
 
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        path = normalize_path(self.path)
+        endpoint = Endpoint.from_path(self.path)
+        content_type = get_content_type(endpoint.file_name)
 
-        handlers = {
-            "/": self.handle_root,
-            "/hello/": self.handle_hello,
-            "/style/": self.handle_style,
-            "/logo/": self.handle_logo,
-            "/0/": self.handle_zde,
+        endpoints = {
+            "/": [self.handle_static, ["index.html", "text/html"]],
+            "/0/": [self.handle_zde, []],
+            "/hello/": [self.handle_hello, []],
+            "/i/": [self.handle_static, [f"images/{endpoint.file_name}", content_type]],
+            "/s/": [self.handle_static, [f"styles/{endpoint.file_name}", content_type]],
         }
 
         try:
-            handler = handlers[path]
-            handler()
+            handler, args = endpoints[endpoint.normal]
+            handler(*args)
         except (NotFound, KeyError):
             self.handle_404()
         except MethodNotAllowed:
             self.handle_405()
         except Exception:
             self.handle_500()
-
-    def handle_root(self):
-        return super().do_GET()
 
     def handle_hello(self):
         content = f"""
@@ -49,25 +48,22 @@ class MyHttp(SimpleHTTPRequestHandler):
 
     def handle_zde(self):
         x = 1 / 0
+        print(x)
 
-    def handle_style(self):
-        css = read_static("styles/style.css")
-        self.respond(css, content_type="text/css")
-
-    def handle_logo(self):
-        image = read_static("images/logo.svg")
-        self.respond(image, content_type="image/svg+xml")
+    def handle_static(self, file_path, content_type):
+        content = read_static(file_path)
+        self.respond(content, content_type=content_type)
 
     def handle_404(self):
-        msg = """NOT FOUND!!!!!!!!"""
-
+        msg = """CHECK YOU"""
         self.respond(msg, code=404, content_type="text/plain")
 
     def handle_405(self):
         self.respond("", code=405, content_type="text/plain")
 
     def handle_500(self):
-        self.respond(traceback.format_exc(), code=500, content_type="text/plain")
+        msg = traceback.format_exc()
+        self.respond(msg, code=500, content_type="text/plain")
 
     def respond(self, message, code=200, content_type="text/html"):
         payload = to_bytes(message)

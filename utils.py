@@ -1,41 +1,50 @@
-from typing import Union
+import mimetypes
+from typing import AnyStr
 
 import settings
 from errors import NotFound
 
 
-def normalize_path(path: str) -> str:
-    if not path:
-        return "/"
+def to_bytes(text: AnyStr) -> bytes:
+    """
+    Safely converts any string to bytes.
+    :param text: any string
+    :return: bytes
+    """
 
-    normalized_path = path
-
-    if normalized_path[-1] != "/":
-        normalized_path = f"{normalized_path}/"
-
-    return normalized_path
-
-
-def to_bytes(text: Union[str, bytes]) -> bytes:
     if isinstance(text, bytes):
         return text
 
     if not isinstance(text, str):
-        msg = f"cannot convert {type(text)} to bytes"
-        raise ValueError(msg)
+        err_msg = f"cannot convert {type(text)} to bytes"
+        raise ValueError(err_msg)
 
     result = text.encode()
     return result
 
 
 def read_static(path: str) -> bytes:
-    static = settings.STATIC_DIR / path
-    if not static.is_file():
-        full_path = static.resolve().as_posix()
-        msg = f"file <{full_path}> not found"
-        raise NotFound(msg)
+    """
+    Reads and returns the content of static file.
+    If there is no file, then NotFound exception is raised.
+    :param path: path to static content
+    :return: bytes of content
+    """
 
-    with static.open("rb") as fp:
-        result = fp.read()
+    static_obj = settings.STATIC_DIR / path
+    if not static_obj.is_file():
+        static_path = static_obj.resolve().as_posix()
+        err_msg = f"file <{static_path}> not found"
+        raise NotFound(err_msg)
 
-    return result
+    with static_obj.open("rb") as src:
+        content = src.read()
+
+    return content
+
+
+def get_content_type(file_path: str) -> str:
+    if not file_path:
+        return "text/html"
+    content_type, _ = mimetypes.guess_type(file_path)
+    return content_type

@@ -1,27 +1,8 @@
 import pytest
 
 from errors import NotFound
-from utils import normalize_path
 from utils import read_static
 from utils import to_bytes
-
-
-@pytest.mark.unit
-def test_normalize_path():
-    data_set = {
-        "": "/",
-        "/": "/",
-        "hello": "hello/",
-        "hello/": "hello/",
-    }
-
-    for input_data, expected_data in data_set.items():
-        output_data = normalize_path(input_data)
-
-        assert \
-            output_data == expected_data, \
-            f"path `{input_data}` normalized to `{output_data}`," \
-            f" while `{expected_data}` expected"
 
 
 @pytest.mark.unit
