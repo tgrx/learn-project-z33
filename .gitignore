@@ -1,5 +1,7 @@
 *$py.class
 **/.DS_Store
+**/artifacts/*.html
+**/artifacts/*.png
 *.cover
 *.egg
 *.egg-info/
@@ -69,7 +71,6 @@ profile_default/
 sdist/
 share/python-wheels/
 target/
-tests/**/*.png
 var/
 venv.bak/
 venv/

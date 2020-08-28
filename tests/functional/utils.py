@@ -18,14 +18,19 @@ def build_chrome():
 
 def screenshot_on_failure(test):
     @wraps(test)
-    def decorated_test(browser, *args, **kwargs):
+    def decorated_test(browser, request, *args, **kwargs):
         try:
-            test(browser, *args, **kwargs)
+            test(browser, request, *args, **kwargs)
         except Exception:
-            ts = datetime.now().strftime(f"%Y%m%d---%H%M%S")
-            fname = f"{test.__name__}---{ts}.png"
-            fpath = (settings.SCREENSHOTS_DIR / fname).resolve().as_posix()
-            browser.save_screenshot(fpath)
+            ts = datetime.now().strftime(f"%Y.%m.%d.%H.%M.%S")
+            test_name = f"{request.module.__name__}.{test.__name__}"
+            png = f"{test_name}.{ts}.png"
+            html = f"{test_name}.{ts}.html"
+            png_path = (settings.ARTIFACTS_DIR / png).resolve()
+            html_path = (settings.ARTIFACTS_DIR / html).resolve()
+            with html_path.open("w") as _dst:
+                _dst.write(browser.page_source)
+            browser.save_screenshot(png_path.as_posix())
             raise
 
     return decorated_test

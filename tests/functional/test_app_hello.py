@@ -1,4 +1,3 @@
-from contextlib import closing
 from datetime import date
 
 import pytest
@@ -7,7 +6,6 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from tests.functional.utils import build_chrome
 from tests.functional.utils import screenshot_on_failure
 
 url = "http://localhost:8000/hello"
@@ -15,7 +13,7 @@ url = "http://localhost:8000/hello"
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get(browser):
+def test_get(browser, request):
     browser.get(url)
 
     assert "Study Project Z33 :: Hello" == browser.title
@@ -37,16 +35,16 @@ def test_get(browser):
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get_qs(browser):
+def test_get_qs(browser, request):
     name = "USER"
 
     age = 10
     year = date.today().year - age
 
     name_on_page = f"Hello {name}"
-    year_on_page = f"You was born at {year}"
+    year_on_page = f"You was born at {year}!"
 
-    browser.get(f"{url}?name={name}")
+    browser.get(f"{url}?name={name}&age={age}")
 
     input_name = browser.find_element_by_id("name-id")
     assert input_name.tag_name == "input"
@@ -56,19 +54,19 @@ def test_get_qs(browser):
     assert input_age.tag_name == "input"
     assert input_age.text == ""
 
-    assert name_on_page in browser.page_source, f"no '{name_on_page} found on page"
-    assert year_on_page in browser.page_source, f"no '{year_on_page} found on page"
+    assert name_on_page in browser.page_source
+    assert year_on_page in browser.page_source
 
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get_form(browser):
+def test_get_form(browser, request):
     name = "USER"
     age = 10
     year = date.today().year - age
 
     name_on_page = f"Hello {name}"
-    year_on_page = f"You was born at {year}"
+    year_on_page = f"You was born at {year}!"
 
     browser.get(f"{url}")
 
@@ -86,12 +84,7 @@ def test_get_form(browser):
     )
     assert redirected
 
-    assert browser.current_url.endswith(f"/hello?name={name}")
+    assert browser.current_url.endswith(f"/hello?name={name}&age={age}")
 
-    assert name_on_page in browser.page_source, f"no '{name_on_page} found on page"
-    assert year_on_page in browser.page_source, f"no '{year_on_page} found on page"
-
-
-if __name__ == "__main__":
-    with closing(build_chrome()) as b:
-        test_get(b)
+    assert name_on_page in browser.page_source
+    assert year_on_page in browser.page_source

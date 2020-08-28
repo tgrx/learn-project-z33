@@ -57,9 +57,9 @@ def test_get_user_data():
     for qs, expected in data_set.items():
         got = get_user_data(qs)
 
-        assert \
-            got == expected, \
-            f"user data mismatch:" \
-            f" for qs=`{qs}`" \
-            f" got {got}," \
+        assert got == expected, (
+            f"user data mismatch:"
+            f" for qs=`{qs}`"
+            f" got {got},"
             f" while {expected} expected"
+        )
