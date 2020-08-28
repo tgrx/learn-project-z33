@@ -1,7 +1,9 @@
 import mimetypes
 from typing import AnyStr
+from urllib.parse import parse_qs
 
 import settings
+from custom_types import User
 from errors import NotFound
 
 
@@ -50,17 +52,16 @@ def get_content_type(file_path: str) -> str:
     return content_type
 
 
-def get_name_from_qs(qs: str) -> str:
-    if not qs:
-        return "world"
+def get_user_data(qs: str) -> User:
+    qp = parse_qs(qs)
 
-    pairs = qs.split("&")
+    default_list_of_names = "world"
+    default_list_of_ages = 0
 
-    for pair in pairs:
-        if "=" not in pair:
-            continue
-        key, value = pair.split("=")
-        if key == "name":
-            return value
+    list_of_names = qp.get("name", default_list_of_names)
+    list_of_ages = qp.get("age", default_list_of_ages)
 
-    return "world"
+    name = list_of_names[0]
+    age = int(list_of_ages[0])
+
+    return User(name=name, age=age)
