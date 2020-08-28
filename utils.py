@@ -55,13 +55,13 @@ def get_content_type(file_path: str) -> str:
 def get_user_data(qs: str) -> User:
     qp = parse_qs(qs)
 
-    default_list_of_names = "world"
-    default_list_of_ages = 0
+    default_names = ["world"]
+    default_ages = [0]
 
-    list_of_names = qp.get("name", default_list_of_names)
-    list_of_ages = qp.get("age", default_list_of_ages)
+    name_values = qp.get("name", default_names)
+    age_values = qp.get("age", default_ages)
 
-    name = list_of_names[0]
-    age = int(list_of_ages[0])
+    name = name_values[0]
+    age = int(age_values[0])
 
     return User(name=name, age=age)

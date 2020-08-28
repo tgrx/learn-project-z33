@@ -1,7 +1,7 @@
 import pytest
 
 import settings
-from tests.functional.browsers import build_chrome
+from tests.functional.utils import build_chrome
 
 
 @pytest.yield_fixture(scope="function", autouse=True)
