@@ -1,7 +1,9 @@
 import mimetypes
 from typing import AnyStr
+from urllib.parse import parse_qs
 
 import settings
+from custom_types import User
 from errors import NotFound
 
 
@@ -48,3 +50,18 @@ def get_content_type(file_path: str) -> str:
         return "text/html"
     content_type, _ = mimetypes.guess_type(file_path)
     return content_type
+
+
+def get_user_data(qs: str) -> User:
+    qp = parse_qs(qs)
+
+    default_names = ["world"]
+    default_ages = [0]
+
+    name_values = qp.get("name", default_names)
+    age_values = qp.get("age", default_ages)
+
+    name = name_values[0]
+    age = int(age_values[0])
+
+    return User(name=name, age=age)

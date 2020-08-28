@@ -1,4 +1,5 @@
 import traceback
+from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 
 import settings
@@ -6,6 +7,7 @@ from custom_types import Endpoint
 from errors import MethodNotAllowed
 from errors import NotFound
 from utils import get_content_type
+from utils import get_user_data
 from utils import read_static
 from utils import to_bytes
 
@@ -18,7 +20,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
             "/0/": [self.handle_zde, []],
-            "/hello/": [self.handle_hello, []],
+            "/hello/": [self.handle_hello, [endpoint]],
             "/i/": [self.handle_static, [f"images/{endpoint.file_name}", content_type]],
             "/s/": [self.handle_static, [f"styles/{endpoint.file_name}", content_type]],
         }
@@ -33,13 +35,28 @@ class MyHttp(SimpleHTTPRequestHandler):
         except Exception:
             self.handle_500()
 
-    def handle_hello(self):
+    def handle_hello(self, endpoint):
+        user = get_user_data(endpoint.query_string)
+        year = datetime.now().year - user.age
+
         content = f"""
         <html>
-        <head><title>Hello Page</title></head>
+        <head><title>Study Project Z33 :: Hello</title></head>
         <body>
-        <h1>Hello world!</h1>
+        <h1>Hello {user.name}!</h1>
+        <h1>You was born at {year}!</h1>
         <p>path: {self.path}</p>
+        
+        <form>
+            <label for="name-id">Your name:</label>
+            <input type="text" name="name" id="name-id">
+
+            <label for="age-id">Your age:</label>
+            <input type="text" name="age" id="age-id">
+
+            <button type="submit" id="greet-button-id">Greet</button>
+        </form>
+        
         </body>
         </html>
         """

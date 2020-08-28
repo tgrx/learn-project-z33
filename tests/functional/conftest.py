@@ -1,32 +1,25 @@
 import pytest
-from selenium import webdriver
 
 import settings
+from tests.functional.utils import build_chrome
 
 
-@pytest.yield_fixture(scope="function", autouse=True)
-def chrome():
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("headless")
-
-    browser = webdriver.Chrome(options=chrome_options)
-    browser.implicitly_wait(10)
-
-    try:
-        yield browser
-    finally:
-        browser.close()
-        browser.quit()
+@pytest.yield_fixture(scope="session", autouse=True)
+def browser():
+    bro = build_chrome()
+    yield bro
+    bro.close()
+    bro.quit()
 
 
-@pytest.yield_fixture(scope="function", autouse=True)
+@pytest.yield_fixture(scope="session", autouse=True)
 def main_css():
     path = settings.STATIC_DIR / "styles" / "main.css"
     with path.open("r") as src:
         yield src.read()
 
 
-@pytest.yield_fixture(scope="function", autouse=True)
+@pytest.yield_fixture(scope="session", autouse=True)
 def logo_svg():
     path = settings.STATIC_DIR / "images" / "logo.svg"
     with path.open("r") as src:
