@@ -1,0 +1,18 @@
+dist: xenial
+language: python
+
+install:
+  - pip install pipenv --upgrade
+
+script:
+  - pytest .
+
+#after_success:
+#  - codecov
+
+cache: pip
+
+jobs:
+  include:
+    - stage: test
+      python: '3.8'
