@@ -6,16 +6,12 @@ from custom_types import Endpoint
 @pytest.mark.unit
 def test_endpoint():
     data_set = {
-        "": Endpoint(original="", normal="/", file_name=None),
-        "/": Endpoint(original="/", normal="/", file_name=None),
-        "/images": Endpoint(original="/images", normal="/images/", file_name=None),
-        "/images/": Endpoint(original="/images/", normal="/images/", file_name=None),
-        "/images/a": Endpoint(
-            original="/images/a", normal="/images/a/", file_name=None
-        ),
-        "/images/a/": Endpoint(
-            original="/images/a/", normal="/images/a/", file_name=None
-        ),
+        "": Endpoint(original="", normal="/"),
+        "/": Endpoint(original="/", normal="/"),
+        "/images": Endpoint(original="/images", normal="/images/"),
+        "/images/": Endpoint(original="/images/", normal="/images/"),
+        "/images/a": Endpoint(original="/images/a", normal="/images/a/"),
+        "/images/a/": Endpoint(original="/images/a/", normal="/images/a/"),
         "/images/image.jpg": Endpoint(
             original="/images/image.jpg", normal="/images/", file_name="image.jpg"
         ),

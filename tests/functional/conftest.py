@@ -1,22 +1,19 @@
 import pytest
-from selenium import webdriver
 
 import settings
+from tests.functional.browsers import build_chrome
 
 
 @pytest.yield_fixture(scope="function", autouse=True)
-def chrome():
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("headless")
-
-    browser = webdriver.Chrome(options=chrome_options)
-    browser.implicitly_wait(10)
-
+def browser():
+    bro = None
     try:
-        yield browser
+        bro = build_chrome()
+        yield bro
     finally:
-        browser.close()
-        browser.quit()
+        if bro:
+            bro.close()
+            bro.quit()
 
 
 @pytest.yield_fixture(scope="function", autouse=True)

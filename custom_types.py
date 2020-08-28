@@ -6,13 +6,13 @@ from typing import Optional
 class Endpoint(NamedTuple):
     original: str
     normal: str
-    file_name: Optional[str]
-    query_string: Optional[str]
+    file_name: Optional[str] = None
+    query_string: Optional[str] = None
 
     @classmethod
     def from_path(cls, path: str) -> "Endpoint":
         if not path:
-            return Endpoint(original="", normal="/", file_name=None, query_string=None)
+            return Endpoint(original="", normal="/")
 
         xxx = path.split("?")
         if len(xxx) == 2:

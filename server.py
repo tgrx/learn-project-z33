@@ -39,16 +39,16 @@ class MyHttp(SimpleHTTPRequestHandler):
 
         content = f"""
         <html>
-        <head><title>Hello Page</title></head>
+        <head><title>Study Project Z33 :: Hello</title></head>
         <body>
         <h1>Hello {name}!</h1>
         <h1>You was born at {2020}!</h1>
         <p>path: {self.path}</p>
         
         <form>
-            <label for="xxx-id">Your name:</label>
-            <input type="text" name="xxx" id="xxx-id">
-            <button type="submit">Greet</button>
+            <label for="name-id">Your name:</label>
+            <input type="text" name="name" id="name-id">
+            <button type="submit" id="greet-button-id">Greet</button>
         </form>
         
         </body>

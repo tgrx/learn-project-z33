@@ -60,7 +60,7 @@ def get_name_from_qs(qs: str) -> str:
         if "=" not in pair:
             continue
         key, value = pair.split("=")
-        if key == "xxx":
+        if key == "name":
             return value
 
     return "world"
