@@ -1,34 +1,38 @@
 from itertools import takewhile
 from typing import NamedTuple
 from typing import Optional
+from urllib.parse import urlsplit
 
 
-class Endpoint(NamedTuple):
+class Url(NamedTuple):
     original: str
     normal: str
     file_name: Optional[str] = None
     query_string: Optional[str] = None
 
     @classmethod
-    def from_path(cls, path: str) -> "Endpoint":
+    def from_path(cls, path: str) -> "Url":
         if not path:
-            return Endpoint(original="", normal="/")
+            from consts import ROOT_URL
 
-        xxx = path.split("?")
-        if len(xxx) == 2:
-            path, qs = xxx
-        else:
-            path, qs = xxx[0], None
+            return ROOT_URL
 
-        parts = tuple(filter(bool, path.split("/")))
-        compiled = "/".join(takewhile(lambda part: "." not in part, parts))
-        normal = f"/{compiled}/" if compiled not in ("", "/") else "/"
+        components = urlsplit(path)
 
-        last = parts[-1] if parts else ""
+        segments = tuple(filter(bool, components.path.split("/")))
+        non_file_segments = takewhile(lambda part: "." not in part, segments)
+
+        compiled = "/".join(non_file_segments)
+        normal = f"/{compiled}/" if compiled not in {"", "/"} else "/"
+
+        last = segments[-1] if segments else ""
         file_name = last if "." in last else None
 
-        return Endpoint(
-            original=path, normal=normal, file_name=file_name, query_string=qs
+        return Url(
+            original=path,
+            normal=normal,
+            file_name=file_name,
+            query_string=components.query or None,
         )
 
 

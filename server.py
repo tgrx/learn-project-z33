@@ -3,7 +3,7 @@ from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 
 import settings
-from custom_types import Endpoint
+from custom_types import Url
 from errors import MethodNotAllowed
 from errors import NotFound
 from utils import get_content_type
@@ -14,19 +14,19 @@ from utils import to_bytes
 
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        endpoint = Endpoint.from_path(self.path)
-        content_type = get_content_type(endpoint.file_name)
+        url = Url.from_path(self.path)
+        content_type = get_content_type(url.file_name)
 
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
             "/0/": [self.handle_zde, []],
-            "/hello/": [self.handle_hello, [endpoint]],
-            "/i/": [self.handle_static, [f"images/{endpoint.file_name}", content_type]],
-            "/s/": [self.handle_static, [f"styles/{endpoint.file_name}", content_type]],
+            "/hello/": [self.handle_hello, [url]],
+            "/i/": [self.handle_static, [f"images/{url.file_name}", content_type]],
+            "/s/": [self.handle_static, [f"styles/{url.file_name}", content_type]],
         }
 
         try:
-            handler, args = endpoints[endpoint.normal]
+            handler, args = endpoints[url.normal]
             handler(*args)
         except (NotFound, KeyError):
             self.handle_404()
@@ -35,8 +35,8 @@ class MyHttp(SimpleHTTPRequestHandler):
         except Exception:
             self.handle_500()
 
-    def handle_hello(self, endpoint):
-        user = get_user_data(endpoint.query_string)
+    def handle_hello(self, url):
+        user = get_user_data(url.query_string)
         year = datetime.now().year - user.age
 
         content = f"""

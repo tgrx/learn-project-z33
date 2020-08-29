@@ -41,15 +41,15 @@ def test_read_static():
 @pytest.mark.unit
 def test_get_user_data():
     data_set = {
-        "": User(name="world", age=0),
-        "age": User(name="world", age=0),
-        "age=": User(name="world", age=0),
-        "name": User(name="world", age=0),
-        "name&age": User(name="world", age=0),
-        "name&age=": User(name="world", age=0),
-        "name=": User(name="world", age=0),
-        "name=&age": User(name="world", age=0),
-        "name=&age=10": User(name="world", age=10),
+        "": User(name="anonymous", age=0),
+        "age": User(name="anonymous", age=0),
+        "age=": User(name="anonymous", age=0),
+        "name": User(name="anonymous", age=0),
+        "name&age": User(name="anonymous", age=0),
+        "name&age=": User(name="anonymous", age=0),
+        "name=": User(name="anonymous", age=0),
+        "name=&age": User(name="anonymous", age=0),
+        "name=&age=10": User(name="anonymous", age=10),
         "name=test&age=": User(name="test", age=0),
         "name=test&age=10": User(name="test", age=10),
     }
