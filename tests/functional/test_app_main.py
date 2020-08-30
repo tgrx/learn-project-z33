@@ -3,20 +3,19 @@ import pytest
 from tests.functional.pages import MainPage
 from tests.functional.utils import screenshot_on_failure
 
+url = "http://localhost:8000"
+
 
 @pytest.mark.functional
 @screenshot_on_failure
 def test(browser, request, main_css):
-    page = MainPage(browser, "http://localhost:8000")
+    page = MainPage(browser, url)
 
-    validate_html(page)
-    validate_logo(page)
-    validate_css(page, main_css)
-
-
-def validate_html(page: MainPage):
     validate_title(page)
     validate_content(page)
+    validate_progress(page)
+    validate_logo(page)
+    validate_css(page, main_css)
 
 
 def validate_logo(page: MainPage):
@@ -25,7 +24,8 @@ def validate_logo(page: MainPage):
 
 
 def validate_css(page: MainPage, main_css: str):
-    assert main_css in page.main_css
+    page_main_css = page.main_css
+    assert main_css in page_main_css
 
 
 def validate_title(page: MainPage):
@@ -35,10 +35,6 @@ def validate_title(page: MainPage):
 def validate_content(page: MainPage):
     html = page.html
     assert "Progress" in html
-    assert "/s/main.css" in html
-    assert "/i/logo.svg" in html
-
-    validate_progress(page)
 
 
 def validate_progress(page: MainPage):
