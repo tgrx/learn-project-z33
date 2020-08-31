@@ -17,6 +17,7 @@ jobs:
 #          POSTGRES_PASSWORD: ''
     steps:
       - checkout
+      - run: mkdir test-reports
       - run:
           command: |
             sudo pip install pipenv
@@ -33,6 +34,11 @@ jobs:
       - run:
           command: |
             pipenv run pytest .
+      - store_artifacts:
+          path: test-reports/
+          destination: tr1
+      - store_test_results:
+          path: test-reports/
 
 workflows:
   main:
