@@ -1,17 +1,35 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@0.2.1
+#orbs:
+#  python: circleci/python@0.2.1
 
 jobs:
   build-and-test:
-    executor: python/default
+    docker:
+      - image: circleci/python:3.8.5-stretch-browsers
+#        environment:
+#          FLASK_CONFIG: testing
+#          TEST_DATABASE_URL: postgresql://ubuntu@localhost/circle_test?sslmode=disable
+#      - image: circleci/postgres:9.6.5-alpine-ram
+#        environment:
+#          POSTGRES_USER: ubuntu
+#          POSTGRES_DB: circle_test
+#          POSTGRES_PASSWORD: ''
     steps:
       - checkout
       - run:
           command: |
             sudo pip install pipenv
             pipenv install --dev
+      - run:
+          name: Download Selenium
+          command: |
+            curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      - run:
+          name: Start Selenium
+          command: |
+            java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+          background: true
       - run:
           command: |
             pipenv run pytest .
