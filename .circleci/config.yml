@@ -8,12 +8,13 @@ jobs:
     executor: python/default
     steps:
       - checkout
-      - python/load-cache
-      - python/install-deps
-      - python/save-cache
       - run:
-          command: ./manage.py test
-          name: Test
+        command: |
+          sudo pip install pipenv
+          pipenv install --dev
+      - run:
+        command: |
+          pipenv run pytest .
 
 workflows:
   main:
