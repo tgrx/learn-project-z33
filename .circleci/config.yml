@@ -9,12 +9,12 @@ jobs:
     steps:
       - checkout
       - run:
-        command: |
-          sudo pip install pipenv
-          pipenv install --dev
+          command: |
+            sudo pip install pipenv
+            pipenv install --dev
       - run:
-        command: |
-          pipenv run pytest .
+          command: |
+            pipenv run pytest .
 
 workflows:
   main:
