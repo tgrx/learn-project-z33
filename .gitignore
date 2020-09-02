@@ -19,7 +19,6 @@
 .coverage.*
 .dmypy.json
 .eggs/
-.env
 .hypothesis/
 .idea
 .installed.cfg
