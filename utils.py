@@ -3,7 +3,6 @@ from typing import AnyStr
 from urllib.parse import parse_qs
 
 import settings
-from custom_types import User
 from errors import NotFound
 
 
@@ -58,12 +57,14 @@ def get_content_type(file_path: str) -> str:
     return content_type
 
 
-def get_user_data(query: str) -> User:
+def get_user_data(query: str):
     """
     Builds user's data against given query string
     :param query: string
     :return: user's data
     """
+
+    from custom_types import User
 
     anonymous = User.default()
 

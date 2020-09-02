@@ -4,7 +4,7 @@ from custom_types import HttpRequest
 
 
 @pytest.mark.unit
-def test_endpoint():
+def test():
     data_set = {
         "": HttpRequest(original="", normal="/"),
         "/": HttpRequest(original="/", normal="/"),
@@ -13,16 +13,28 @@ def test_endpoint():
         "/images/a": HttpRequest(original="/images/a", normal="/images/a/"),
         "/images/a/": HttpRequest(original="/images/a/", normal="/images/a/"),
         "/images/image.jpg": HttpRequest(
-            original="/images/image.jpg", normal="/images/", file_name="image.jpg"
+            content_type="image/jpeg",
+            file_name="image.jpg",
+            normal="/images/",
+            original="/images/image.jpg",
         ),
         "/images/image.jpg/": HttpRequest(
-            original="/images/image.jpg/", normal="/images/", file_name="image.jpg"
+            content_type="image/jpeg",
+            file_name="image.jpg",
+            normal="/images/",
+            original="/images/image.jpg/",
         ),
         "/images/x/image.jpg": HttpRequest(
-            original="/images/x/image.jpg", normal="/images/x/", file_name="image.jpg"
+            content_type="image/jpeg",
+            file_name="image.jpg",
+            normal="/images/x/",
+            original="/images/x/image.jpg",
         ),
         "/images/x/image.jpg/": HttpRequest(
-            original="/images/x/image.jpg/", normal="/images/x/", file_name="image.jpg"
+            content_type="image/jpeg",
+            file_name="image.jpg",
+            normal="/images/x/",
+            original="/images/x/image.jpg/",
         ),
     }
 

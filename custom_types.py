@@ -7,19 +7,19 @@ from utils import get_content_type
 
 
 class HttpRequest(NamedTuple):
-    method: str
     original: str
     normal: str
+    method: str = "get"
     file_name: Optional[str] = None
     query_string: Optional[str] = None
-    content_type: Optional[str] = None
+    content_type: Optional[str] = "text/html"
 
     @classmethod
     def default(cls):
-        return cls(method="get", original="", normal="/")
+        return HttpRequest(original="", normal="/")
 
     @classmethod
-    def from_path(cls, path: str, method: str) -> "HttpRequest":
+    def from_path(cls, path: str, method: Optional[str] = None) -> "HttpRequest":
         if not path:
             return cls.default()
 
@@ -37,7 +37,7 @@ class HttpRequest(NamedTuple):
         content_type = get_content_type(file_name)
 
         return HttpRequest(
-            method=method,
+            method=method or "get",
             original=path,
             normal=normal,
             file_name=file_name,
@@ -52,4 +52,4 @@ class User(NamedTuple):
 
     @classmethod
     def default(cls):
-        return cls(name="anonymous", age=0)
+        return User(name="anonymous", age=0)
