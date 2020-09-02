@@ -15,11 +15,13 @@ class HttpRequest(NamedTuple):
     content_type: Optional[str] = None
 
     @classmethod
+    def default(cls):
+        return cls(method="get", original="", normal="/")
+
+    @classmethod
     def from_path(cls, path: str, method: str) -> "HttpRequest":
         if not path:
-            from consts import ROOT_REQUEST
-
-            return ROOT_REQUEST
+            return cls.default()
 
         components = urlsplit(path)
 
@@ -47,3 +49,7 @@ class HttpRequest(NamedTuple):
 class User(NamedTuple):
     name: str
     age: int
+
+    @classmethod
+    def default(cls):
+        return cls(name="anonymous", age=0)
