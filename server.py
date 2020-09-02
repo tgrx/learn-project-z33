@@ -51,7 +51,8 @@ class MyHttp(SimpleHTTPRequestHandler):
         payload = payload_in_bytes.decode()
         return payload
 
-    def get_user_qs_from_file(self):
+    @staticmethod
+    def get_user_qs_from_file() -> str:
         qs_file = STORAGE_DIR / "xxx.txt"
         if not qs_file.is_file():
             return ""
@@ -64,7 +65,8 @@ class MyHttp(SimpleHTTPRequestHandler):
 
         return content
 
-    def save_user_qs_to_file(self, query: str):
+    @staticmethod
+    def save_user_qs_to_file(query: str) -> None:
         qs_file = STORAGE_DIR / "xxx.txt"
 
         with qs_file.open("w") as dst:
