@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
@@ -54,7 +55,7 @@ def test_get_qs(browser, request):
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get_form(browser, request):
+def test_form(browser, request):
     name = "USER"
     age = 10
     year = date.today().year - age
@@ -69,18 +70,18 @@ def test_get_form(browser, request):
 
     set_input_name_value(page, name)
     submit(page)
-    validate_redirect(page, fr"hello\?name={name}")
+    validate_redirect(page, fr"hello/?")
     validate_content(page, name_on_page)
 
     set_input_age_value(page, str(age))
     submit(page)
-    validate_redirect(page, fr"hello\?name=&age={age}")
+    validate_redirect(page, fr"hello/?")
     validate_content(page, anon_on_page, year_on_page)
 
     set_input_name_value(page, name)
     set_input_age_value(page, str(age))
     submit(page)
-    validate_redirect(page, fr"hello\?name={name}&age={age}")
+    validate_redirect(page, fr"hello/?")
     validate_content(page, name_on_page, year_on_page)
 
 
@@ -109,10 +110,13 @@ def validate_content(page: HelloPage, *texts):
 
 
 def validate_redirect(page: HelloPage, url: str):
-    redirected = WebDriverWait(page.browser, 4).until(
-        expected_conditions.url_matches(url)
-    )
-    assert redirected
+    try:
+        redirected = WebDriverWait(page.browser, 4).until(
+            expected_conditions.url_matches(url)
+        )
+        assert redirected
+    except TimeoutException as err:
+        raise AssertionError("no redirect") from err
 
 
 def set_input_name_value(page: HelloPage, value: str):
