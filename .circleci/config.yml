@@ -1,0 +1,37 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: circleci/python:3.8.5-browsers
+    steps:
+      - checkout
+      - run: mkdir test-reports
+      - run:
+          command: |
+            sudo pip install pipenv
+            pipenv install --dev
+      - run:
+          name: Download Selenium
+          command: curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+      - run:
+          name: Start Selenium
+          command: java -jar selenium-server-standalone-3.5.3.jar -log test-reports/selenium.log
+          background: true
+      - run:
+          name: Start Local Web Server
+          command: pipenv run python -m app
+          background: true
+      - run:
+          command: |
+            pipenv run pytest .
+      - store_artifacts:
+          path: test-reports/
+          destination: tr1
+      - store_test_results:
+          path: test-reports/
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
