@@ -14,3 +14,6 @@ assert TESTS_DIR.is_dir(), f"missing directory: TESTS_DIR=`{TESTS_DIR}`"
 
 ARTIFACTS_DIR = TESTS_DIR / "functional" / "artifacts"
 assert ARTIFACTS_DIR.is_dir(), f"missing directory: ARTIFACTS_DIR=`{ARTIFACTS_DIR}`"
+
+STORAGE_DIR = PROJECT_DIR / "storage"
+assert STORAGE_DIR.is_dir(), f"missing directory: STORAGE_DIR=`{STORAGE_DIR}`"
