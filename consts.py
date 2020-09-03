@@ -1,5 +1,3 @@
-from custom_types import Url
-from custom_types import User
+from settings import STORAGE_DIR
 
-ANONYMOUS_USER = User(name="anonymous", age=0)
-ROOT_URL = Url(original="", normal="/")
+USERS_DATA = STORAGE_DIR / "users.txt"

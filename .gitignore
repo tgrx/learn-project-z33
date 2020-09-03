@@ -19,7 +19,6 @@
 .coverage.*
 .dmypy.json
 .eggs/
-.env
 .hypothesis/
 .idea
 .installed.cfg
@@ -70,6 +69,7 @@ pip-wheel-metadata/
 profile_default/
 sdist/
 share/python-wheels/
+storage/*.txt
 target/
 var/
 venv.bak/

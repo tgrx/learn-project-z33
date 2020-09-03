@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
@@ -14,7 +15,7 @@ url = "http://localhost:8000/hello"
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get(browser, request):
+def test_get(browser, request, users_data):
     page = HelloPage(browser, url)
 
     validate_title(page)
@@ -24,37 +25,7 @@ def test_get(browser, request):
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get_qs(browser, request):
-    name = "USER"
-    age = 10
-    year = date.today().year - age
-
-    anon_on_page = "Hello anonymous"
-    name_on_page = f"Hello {name}"
-    year_on_page = f"You was born at {year}!"
-
-    urls_contents = {
-        f"{url}": (anon_on_page,),
-        f"{url}?age=": (anon_on_page,),
-        f"{url}?age={age}": (anon_on_page, year_on_page),
-        f"{url}?name=": (anon_on_page,),
-        f"{url}?name=&age=": (anon_on_page,),
-        f"{url}?name={name}": (name_on_page,),
-    }
-
-    for test_url, content in urls_contents.items():
-        page = HelloPage(browser, test_url)
-
-        validate_structure(page)
-        assert page.input_name.text == ""
-        assert page.input_age.text == ""
-
-        validate_content(page, *content)
-
-
-@pytest.mark.functional
-@screenshot_on_failure
-def test_get_form(browser, request):
+def test_post(browser, request, users_data):
     name = "USER"
     age = 10
     year = date.today().year - age
@@ -64,23 +35,24 @@ def test_get_form(browser, request):
     year_on_page = f"You was born at {year}!"
 
     page = HelloPage(browser, url)
+
     validate_structure(page)
     validate_content(page, anon_on_page)
 
     set_input_name_value(page, name)
     submit(page)
-    validate_redirect(page, fr"hello\?name={name}")
+    validate_redirect(page, fr"hello/?")
     validate_content(page, name_on_page)
 
     set_input_age_value(page, str(age))
     submit(page)
-    validate_redirect(page, fr"hello\?name=&age={age}")
+    validate_redirect(page, fr"hello/?")
     validate_content(page, anon_on_page, year_on_page)
 
     set_input_name_value(page, name)
     set_input_age_value(page, str(age))
     submit(page)
-    validate_redirect(page, fr"hello\?name={name}&age={age}")
+    validate_redirect(page, fr"hello/?")
     validate_content(page, name_on_page, year_on_page)
 
 
@@ -109,10 +81,13 @@ def validate_content(page: HelloPage, *texts):
 
 
 def validate_redirect(page: HelloPage, url: str):
-    redirected = WebDriverWait(page.browser, 4).until(
-        expected_conditions.url_matches(url)
-    )
-    assert redirected
+    try:
+        redirected = WebDriverWait(page.browser, 4).until(
+            expected_conditions.url_matches(url)
+        )
+        assert redirected
+    except TimeoutException as err:
+        raise AssertionError("no redirect") from err
 
 
 def set_input_name_value(page: HelloPage, value: str):
