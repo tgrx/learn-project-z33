@@ -22,8 +22,10 @@ def main_css():
 
 @pytest.yield_fixture(scope="function", autouse=True)
 def users_data():
-    with USERS_DATA.open("r") as src:
-        data = src.read()
+    data = ""
+    if USERS_DATA.is_file():
+        with USERS_DATA.open("r") as src:
+            data = src.read()
 
     with USERS_DATA.open("w"):
         pass
