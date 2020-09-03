@@ -1,6 +1,4 @@
-import mimetypes
 from typing import AnyStr
-from urllib.parse import parse_qs
 
 import settings
 from errors import NotFound
@@ -24,6 +22,24 @@ def to_bytes(text: AnyStr) -> bytes:
     return result
 
 
+def to_str(text: AnyStr) -> str:
+    """
+    Safely converts any string to str.
+    :param text: any string
+    :return: str
+    """
+
+    result = text
+
+    if not isinstance(text, (str, bytes)):
+        result = str(text)
+
+    if isinstance(result, bytes):
+        result = result.decode()
+
+    return result
+
+
 def read_static(path: str) -> bytes:
     """
     Reads and returns the content of static file.
@@ -42,43 +58,3 @@ def read_static(path: str) -> bytes:
         content = src.read()
 
     return content
-
-
-def get_content_type(file_path: str) -> str:
-    """
-    Calculates content-type against given path. Default is "text/html"
-    :param file_path: hypothetical path to file
-    :return: content-type value
-    """
-
-    if not file_path:
-        return "text/html"
-    content_type, _ = mimetypes.guess_type(file_path)
-    return content_type
-
-
-def get_user_data(query: str):
-    """
-    Builds user's data against given query string
-    :param query: string
-    :return: user's data
-    """
-
-    from custom_types import User
-
-    anonymous = User.default()
-
-    try:
-        key_value_pairs = parse_qs(query, strict_parsing=True)
-    except ValueError:
-        return anonymous
-
-    name_values = key_value_pairs.get("name", [anonymous.name])
-    name = name_values[0]
-
-    age_values = key_value_pairs.get("age", [anonymous.age])
-    age = age_values[0]
-    if isinstance(age, str) and age.isdecimal():
-        age = int(age)
-
-    return User(name=name, age=age)

@@ -2,13 +2,14 @@ import traceback
 from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 
+from consts import USERS_DATA
 from custom_types import HttpRequest
+from custom_types import User
 from errors import MethodNotAllowed
 from errors import NotFound
-from settings import STORAGE_DIR
-from utils import get_user_data
 from utils import read_static
 from utils import to_bytes
+from utils import to_str
 
 
 class MyHttp(SimpleHTTPRequestHandler):
@@ -40,45 +41,13 @@ class MyHttp(SimpleHTTPRequestHandler):
         except Exception:
             self.handle_500()
 
-    def get_request_payload(self) -> str:
-        content_length_in_str = self.headers.get("content-length", 0)
-        content_length = int(content_length_in_str)
-
-        if not content_length:
-            return ""
-
-        payload_in_bytes = self.rfile.read(content_length)
-        payload = payload_in_bytes.decode()
-        return payload
-
-    @staticmethod
-    def get_user_qs_from_file() -> str:
-        qs_file = STORAGE_DIR / "xxx.txt"
-        if not qs_file.is_file():
-            return ""
-
-        with qs_file.open("r") as src:
-            content = src.read()
-
-        if isinstance(content, bytes):
-            content = content.decode()
-
-        return content
-
-    @staticmethod
-    def save_user_qs_to_file(query: str) -> None:
-        qs_file = STORAGE_DIR / "xxx.txt"
-
-        with qs_file.open("w") as dst:
-            dst.write(query)
-
     def handle_hello(self, request: HttpRequest):
         if request.method != "get":
             raise MethodNotAllowed
 
-        query_string = self.get_user_qs_from_file()
+        query_string = self.load_user_data()
 
-        user = get_user_data(query_string)
+        user = User.from_query(query_string)
 
         year = datetime.now().year - user.age
 
@@ -111,7 +80,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             raise MethodNotAllowed
 
         qs = self.get_request_payload()
-        self.save_user_qs_to_file(qs)
+        self.save_user_data(qs)
         self.redirect("/hello")
 
     def handle_zde(self):
@@ -146,3 +115,31 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.send_response(302)
         self.send_header("Location", to)
         self.end_headers()
+
+    def get_request_payload(self) -> str:
+        content_length_as_str = self.headers.get("content-length", 0)
+        content_length = int(content_length_as_str)
+
+        if not content_length:
+            return ""
+
+        payload_as_bytes = self.rfile.read(content_length)
+        payload = payload_as_bytes.decode()
+        return payload
+
+    @staticmethod
+    def load_user_data() -> str:
+        if not USERS_DATA.is_file():
+            return ""
+
+        with USERS_DATA.open("r") as src:
+            content = src.read()
+
+        content = to_str(content)
+
+        return content
+
+    @staticmethod
+    def save_user_data(query: str) -> None:
+        with USERS_DATA.open("w") as dst:
+            dst.write(query)

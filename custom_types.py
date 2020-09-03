@@ -1,9 +1,9 @@
+import mimetypes
 from itertools import takewhile
 from typing import NamedTuple
 from typing import Optional
+from urllib.parse import parse_qs
 from urllib.parse import urlsplit
-
-from utils import get_content_type
 
 
 class HttpRequest(NamedTuple):
@@ -34,7 +34,7 @@ class HttpRequest(NamedTuple):
         last = segments[-1] if segments else ""
         file_name = last if "." in last else None
 
-        content_type = get_content_type(file_name)
+        content_type, _ = mimetypes.guess_type(file_name or "index.html")
 
         return HttpRequest(
             method=method or "get",
@@ -53,3 +53,22 @@ class User(NamedTuple):
     @classmethod
     def default(cls):
         return User(name="anonymous", age=0)
+
+    @classmethod
+    def from_query(cls, query: str) -> "User":
+        anonymous = cls.default()
+
+        try:
+            key_value_pairs = parse_qs(query, strict_parsing=True)
+        except ValueError:
+            return anonymous
+
+        name_values = key_value_pairs.get("name", [anonymous.name])
+        name = name_values[0]
+
+        age_values = key_value_pairs.get("age", [anonymous.age])
+        age = age_values[0]
+        if isinstance(age, str) and age.isdecimal():
+            age = int(age)
+
+        return User(name=name, age=age)
