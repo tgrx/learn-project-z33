@@ -1,7 +1,8 @@
 import traceback
-from datetime import datetime
+from datetime import date
 from http.server import SimpleHTTPRequestHandler
 
+from consts import CSS_CLASS_ERROR
 from consts import USERS_DATA
 from custom_types import HttpRequest
 from custom_types import User
@@ -45,33 +46,10 @@ class MyHttp(SimpleHTTPRequestHandler):
         if request.method != "get":
             raise MethodNotAllowed
 
-        query_string = self.load_user_data()
+        query = self.load_user_data()
+        user = User.build(query)
 
-        user = User.from_query(query_string)
-
-        year = datetime.now().year - user.age
-
-        content = f"""
-        <html>
-        <head><title>Study Project Z33 :: Hello</title></head>
-        <body>
-        <h1>Hello {user.name}!</h1>
-        <h1>You was born at {year}!</h1>
-        <p>path: {self.path}</p>
-        
-        <form method="post" action="/hello-update">
-            <label for="name-id">Your name:</label>
-            <input type="text" name="name" id="name-id">
-
-            <label for="age-id">Your age:</label>
-            <input type="text" name="age" id="age-id">
-
-            <button type="submit" id="greet-button-id">Greet</button>
-        </form>
-        
-        </body>
-        </html>
-        """
+        content = self.render_hello_page(user, user)
 
         self.respond(content)
 
@@ -79,9 +57,61 @@ class MyHttp(SimpleHTTPRequestHandler):
         if request.method != "post":
             raise MethodNotAllowed
 
-        qs = self.get_request_payload()
-        self.save_user_data(qs)
-        self.redirect("/hello")
+        form_data = self.get_form_data()
+        new_user = User.build(form_data)
+
+        if not new_user.errors:
+            self.save_user_data(form_data)
+            self.redirect("/hello")
+            return
+
+        saved_data = self.load_user_data()
+        saved_user = User.build(saved_data)
+
+        hello_page = self.render_hello_page(new_user, saved_user)
+
+        self.respond(hello_page)
+
+    def render_hello_page(self, new_user: User, saved_user: User) -> str:
+        css_class_for_name = css_class_for_age = ""
+        label_for_name = "Your name: "
+        label_for_age = "Your age: "
+
+        age_new = age_saved = saved_user.age
+        name_new = name_saved = saved_user.name
+
+        year = date.today().year - age_saved
+
+        if new_user.errors:
+            if "name" in new_user.errors:
+                error = new_user.errors["name"]
+                label_for_name = f"ERROR: {error}"
+                css_class_for_name = CSS_CLASS_ERROR
+
+            if "age" in new_user.errors:
+                error = new_user.errors["age"]
+                label_for_age = f"ERROR: {error}"
+                css_class_for_age = CSS_CLASS_ERROR
+
+            name_new = new_user.name
+            age_new = new_user.age
+
+        template = read_static("hello.html").decode()
+
+        context = {
+            "age_new": age_new or "",
+            "label_for_age": label_for_age,
+            "label_for_name": label_for_name,
+            "name_new": name_new or "",
+            "name_saved": name_saved or "",
+            "class_for_age": css_class_for_age,
+            "class_for_name": css_class_for_name,
+            "year": year,
+        }
+
+        content = template.format(**context)
+
+        return content
 
     def handle_zde(self):
         x = 1 / 0
@@ -116,7 +146,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.send_header("Location", to)
         self.end_headers()
 
-    def get_request_payload(self) -> str:
+    def get_form_data(self) -> str:
         content_length_as_str = self.headers.get("content-length", 0)
         content_length = int(content_length_as_str)
 
@@ -124,7 +154,8 @@ class MyHttp(SimpleHTTPRequestHandler):
             return ""
 
         payload_as_bytes = self.rfile.read(content_length)
-        payload = payload_as_bytes.decode()
+        payload = to_str(payload_as_bytes)
+
         return payload
 
     @staticmethod
@@ -133,13 +164,13 @@ class MyHttp(SimpleHTTPRequestHandler):
             return ""
 
         with USERS_DATA.open("r") as src:
-            content = src.read()
+            data = src.read()
 
-        content = to_str(content)
+        data = to_str(data)
 
-        return content
+        return data
 
     @staticmethod
-    def save_user_data(query: str) -> None:
+    def save_user_data(data: str) -> None:
         with USERS_DATA.open("w") as dst:
-            dst.write(query)
+            dst.write(data)

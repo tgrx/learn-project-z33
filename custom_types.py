@@ -2,8 +2,12 @@ import mimetypes
 from itertools import takewhile
 from typing import NamedTuple
 from typing import Optional
+from typing import Union
 from urllib.parse import parse_qs
 from urllib.parse import urlsplit
+
+from validatiors import validate_age
+from validatiors import validate_name
 
 
 class HttpRequest(NamedTuple):
@@ -37,25 +41,29 @@ class HttpRequest(NamedTuple):
         content_type, _ = mimetypes.guess_type(file_name or "index.html")
 
         return HttpRequest(
-            method=method or "get",
-            original=path,
-            normal=normal,
-            file_name=file_name,
-            query_string=components.query or None,
             content_type=content_type,
+            file_name=file_name,
+            method=method or "get",
+            normal=normal,
+            original=path,
+            query_string=components.query or None,
         )
 
 
 class User(NamedTuple):
-    name: str
-    age: int
+    errors: Optional[dict] = None
+
+    name: Optional[str] = None
+    age: Union[str, int, None] = None
 
     @classmethod
     def default(cls):
-        return User(name="anonymous", age=0)
+        name = "anonymous"
+        age = 0
+        return User(age=age, name=name,)
 
     @classmethod
-    def from_query(cls, query: str) -> "User":
+    def build(cls, query: str) -> "User":
         anonymous = cls.default()
 
         try:
@@ -63,12 +71,26 @@ class User(NamedTuple):
         except ValueError:
             return anonymous
 
-        name_values = key_value_pairs.get("name", [anonymous.name])
+        name_values = key_value_pairs.get("name", [None])
         name = name_values[0]
 
-        age_values = key_value_pairs.get("age", [anonymous.age])
+        age_values = key_value_pairs.get("age", [None])
         age = age_values[0]
-        if isinstance(age, str) and age.isdecimal():
+
+        errors = {}
+
+        validations = [
+            ("name", validate_name, name),
+            ("age", validate_age, age),
+        ]
+
+        for field, validation, value in validations:
+            try:
+                validation(value)
+            except ValueError as error:
+                errors[field] = str(error)
+
+        if "age" not in errors:
             age = int(age)
 
-        return User(name=name, age=age)
+        return User(age=age, name=name, errors=errors,)

@@ -1,0 +1,65 @@
+<html>
+<head>
+  <title>Study Project Z33 :: Hello</title>
+  <style>
+    :root {{
+      --padding-left: 30px;
+      --padding-top: 30px;
+    }}
+
+    body {{
+      padding-left: var(--padding-left);
+      padding-top: var(--padding-left);
+    }}
+
+    .g {{
+      display: grid;
+      grid-column-gap: 0.2rem;
+      grid-row-gap: 1rem;
+      grid-template-areas:
+        "gi-name-label  gi-name-label"
+        "gi-name-input  gi-empty-12"
+        "gi-empty-21    gi-empty-22"
+        "gi-age-label   gi-age-label"
+        "gi-age-input   gi-empty-32"
+        "gi-empty-41    gi-empty-42"
+        "gi-submit      gi-empty-52";
+    }}
+
+    .f > * {{
+      left: 0;
+      margin: auto;
+      padding-left: var(--padding-left);
+      padding-top: var(--padding-top);
+      position: absolute;
+      width: 40%;
+    }}
+
+    .error {{
+      background-color: darkred;
+      color: white;
+      font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+      padding: 1rem;
+    }}
+  </style>
+</head>
+<body>
+<h1>Hello {name_saved}!</h1>
+<h1>You was born at {year}!</h1>
+
+<div class="f">
+  <form action="/hello-update" method="post">
+    <div class="g">
+      <label class="{class_for_name}" for="name-id" style="grid-area: gi-name-label">{label_for_name}</label>
+      <input id="name-id" name="name" style="grid-area: gi-name-input" type="text" value="{name_new}">
+
+      <label class="{class_for_age}" for="age-id" style="grid-area: gi-age-label">{label_for_age}</label>
+      <input id="age-id" name="age" style="grid-area: gi-age-input" type="text" value="{age_new}">
+
+      <button id="greet-button-id" style="grid-area: gi-submit" type="submit">Greet</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

@@ -7,20 +7,20 @@ from custom_types import User
 def test():
     data_set = {
         "": User(name="anonymous", age=0),
-        "age": User(name="anonymous", age=0),
-        "age=": User(name="anonymous", age=0),
-        "name": User(name="anonymous", age=0),
-        "name&age": User(name="anonymous", age=0),
-        "name&age=": User(name="anonymous", age=0),
-        "name=": User(name="anonymous", age=0),
-        "name=&age": User(name="anonymous", age=0),
-        "name=&age=10": User(name="anonymous", age=10),
-        "name=test&age=": User(name="test", age=0),
-        "name=test&age=10": User(name="test", age=10),
+        "age_valid": User(name="anonymous", age=0),
+        "age_valid=": User(name="anonymous", age=0),
+        "name_valid": User(name="anonymous", age=0),
+        "name_valid&age_valid": User(name="anonymous", age=0),
+        "name_valid&age_valid=": User(name="anonymous", age=0),
+        "name_valid=": User(name="anonymous", age=0),
+        "name_valid=&age_valid": User(name="anonymous", age=0),
+        "name_valid=&age_valid=10": User(name="anonymous", age=10),
+        "name_valid=test&age_valid=": User(name="test", age=0),
+        "name_valid=test&age_valid=10": User(name="test", age=10),
     }
 
     for qs, expected in data_set.items():
-        got = User.from_query(qs)
+        got = User.build(qs)
 
         assert got == expected, (
             f"user data mismatch:"

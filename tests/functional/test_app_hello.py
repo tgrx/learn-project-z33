@@ -61,7 +61,7 @@ def validate_title(page: HelloPage):
 
 
 def validate_structure(page: HelloPage):
-    assert "form" in page.html
+    assert "new_user" in page.html
 
     button: WebElement = page.button_greet
     assert button.tag_name == "button"
