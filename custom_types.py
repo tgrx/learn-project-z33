@@ -60,7 +60,10 @@ class User(NamedTuple):
     def default(cls):
         name = "anonymous"
         age = 0
-        return User(age=age, name=name,)
+        return User(
+            age=age,
+            name=name,
+        )
 
     @classmethod
     def build(cls, query: str) -> "User":
@@ -93,4 +96,8 @@ class User(NamedTuple):
         if "age" not in errors:
             age = int(age)
 
-        return User(age=age, name=name, errors=errors,)
+        return User(
+            age=age,
+            name=name,
+            errors=errors,
+        )
