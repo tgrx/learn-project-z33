@@ -27,15 +27,15 @@ jobs:
 
       - restore_cache:
           keys:
-            - cc-selenium-{{ checksum "selenium.jar" }}
+            - cc-selenium-{{ checksum "./.circleci/selenium.link" }}
             - cc-selenium- # used if checksum fails
       - run:
           name: Setting up Selenium
           command: |
-            curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
-            mv selenium-server-standalone-3.5.3.jar selenium.jar
+            curl -O $(cat ./.circleci/selenium.link)
+            mv selenium-*.jar selenium.jar
       - save_cache:
-          key: cc-selenium-{{ checksum "selenium.jar" }}
+          key: cc-selenium-{{ checksum "./.circleci/selenium.link" }}
           paths:
             - ./selenium.jar
 
