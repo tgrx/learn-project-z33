@@ -30,7 +30,7 @@ def test_post(browser, request, users_data):
     age = 10
     year = date.today().year - age
 
-    anon_on_page = "Hello anonymous"
+    anon_on_page = "Hello anonymous!"
     name_on_page = f"Hello {name}"
     year_on_page = f"You was born at {year}!"
 
@@ -40,14 +40,16 @@ def test_post(browser, request, users_data):
     validate_content(page, anon_on_page)
 
     set_input_name_value(page, name)
+    set_input_age_value(page, "")
     submit(page)
     validate_redirect(page, fr"hello/?")
-    validate_content(page, name_on_page)
+    validate_content(page, anon_on_page)
 
+    set_input_name_value(page, "")
     set_input_age_value(page, str(age))
     submit(page)
     validate_redirect(page, fr"hello/?")
-    validate_content(page, anon_on_page, year_on_page)
+    validate_content(page, anon_on_page)
 
     set_input_name_value(page, name)
     set_input_age_value(page, str(age))
@@ -61,7 +63,7 @@ def validate_title(page: HelloPage):
 
 
 def validate_structure(page: HelloPage):
-    assert "new_user" in page.html
+    assert "form" in page.html
 
     button: WebElement = page.button_greet
     assert button.tag_name == "button"
@@ -91,11 +93,15 @@ def validate_redirect(page: HelloPage, url: str):
 
 
 def set_input_name_value(page: HelloPage, value: str):
-    page.input_name.send_keys(value)
+    page.input_name.clear()
+    if value:
+        page.input_name.send_keys(value)
 
 
 def set_input_age_value(page: HelloPage, value: str):
-    page.input_age.send_keys(value)
+    page.input_age.clear()
+    if value:
+        page.input_age.send_keys(value)
 
 
 def submit(page: HelloPage):
