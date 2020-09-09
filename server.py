@@ -2,6 +2,8 @@ import traceback
 from datetime import date
 from http.server import SimpleHTTPRequestHandler
 
+from jinja2 import Template
+
 from consts import CSS_CLASS_ERROR
 from consts import USERS_DATA
 from custom_types import HttpRequest
@@ -33,9 +35,14 @@ class MyHttp(SimpleHTTPRequestHandler):
         }
 
         try:
-            handler, args = endpoints[req.normal]
+
+            try:
+                handler, args = endpoints[req.normal]
+            except KeyError:
+                raise NotFound
+
             handler(*args)
-        except (NotFound, KeyError):
+        except NotFound:
             self.handle_404()
         except MethodNotAllowed:
             self.handle_405()
@@ -96,7 +103,8 @@ class MyHttp(SimpleHTTPRequestHandler):
             name_new = new_user.name
             age_new = new_user.age
 
-        template = read_static("hello.html").decode()
+        html = read_static("hello.html").decode()
+        template = Template(html)
 
         context = {
             "age_new": age_new or "",
@@ -107,9 +115,10 @@ class MyHttp(SimpleHTTPRequestHandler):
             "class_for_age": css_class_for_age,
             "class_for_name": css_class_for_name,
             "year": year,
+            "fdsfdsfds": 2354234532,
         }
 
-        content = template.format(**context)
+        content = template.render(**context)
 
         return content
 

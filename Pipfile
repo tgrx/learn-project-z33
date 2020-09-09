@@ -15,8 +15,9 @@ pytest-mock = "*"
 pytest-selenium = "*"
 
 [packages]
-django = "*"
 delorean = "*"
+django = "*"
+jinja2 = "*"
 
 [requires]
 python_version = "3.8"
