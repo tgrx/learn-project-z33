@@ -16,6 +16,7 @@ pytest-selenium = "*"
 
 [packages]
 django = "*"
+delorean = "*"
 
 [requires]
 python_version = "3.8"
