@@ -30,6 +30,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             "/0/": [self.handle_zde, []],
             "/hello/": [self.handle_hello, [req]],
             "/hello-update/": [self.handle_hello_update, [req]],
+            "/hello-reset/": [self.handle_hello_reset, [req]],
             "/i/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
             "/s/": [self.handle_static, [f"styles/{req.file_name}", req.content_type]],
         }
@@ -78,6 +79,13 @@ class MyHttp(SimpleHTTPRequestHandler):
         hello_page = self.render_hello_page(new_user, saved_user)
 
         self.respond(hello_page)
+
+    def handle_hello_reset(self, request: HttpRequest):
+        if request.method != "post":
+            raise MethodNotAllowed
+
+        self.reset_user_data()
+        self.redirect("/hello/")
 
     def render_hello_page(self, new_user: User, saved_user: User) -> str:
         css_class_for_name = css_class_for_age = ""
@@ -183,3 +191,7 @@ class MyHttp(SimpleHTTPRequestHandler):
     def save_user_data(data: str) -> None:
         with USERS_DATA.open("w") as dst:
             dst.write(data)
+
+    @classmethod
+    def reset_user_data(cls) -> None:
+        cls.save_user_data("")

@@ -57,6 +57,10 @@ def test_post(browser, request, users_data):
     validate_redirect(page, fr"hello/?")
     validate_content(page, name_on_page, year_on_page)
 
+    reset(page)
+    validate_redirect(page, fr"hello/?")
+    validate_content(page, anon_on_page)
+
 
 def validate_title(page: HelloPage):
     assert "Study Project Z33 :: Hello" == page.title
@@ -65,8 +69,11 @@ def validate_title(page: HelloPage):
 def validate_structure(page: HelloPage):
     assert "form" in page.html
 
-    button: WebElement = page.button_greet
-    assert button.tag_name == "button"
+    button_submit: WebElement = page.button_greet
+    assert button_submit.tag_name == "button"
+
+    button_reset: WebElement = page.button_reset
+    assert button_reset.tag_name == "button"
 
     input_name = page.input_name
     assert input_name.tag_name == "input"
@@ -106,3 +113,7 @@ def set_input_age_value(page: HelloPage, value: str):
 
 def submit(page: HelloPage):
     page.button_greet.send_keys(Keys.RETURN)
+
+
+def reset(page: HelloPage):
+    page.button_reset.send_keys(Keys.RETURN)

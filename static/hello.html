@@ -12,7 +12,7 @@
       padding-top: var(--padding-left);
     }
 
-    .g {
+    .greet-form {
       display: grid;
       grid-column-gap: 0.2rem;
       grid-row-gap: 1rem;
@@ -26,12 +26,11 @@
         "gi-submit      gi-empty-52";
     }
 
-    .f > * {
+    .form-container > * {
       left: 0;
       margin: auto;
       padding-left: var(--padding-left);
       padding-top: var(--padding-top);
-      position: absolute;
       width: 40%;
     }
 
@@ -46,20 +45,21 @@
 <body>
 <h1>Hello {{name_saved}}!</h1>
 <h1>You was born at {{year}}!</h1>
-
-<div class="f">
+<div class="form-container">
   <form action="/hello-update" method="post">
-    <div class="g">
+    <div class="greet-form">
       <label class="{{class_for_name}}" for="name-id" style="grid-area: gi-name-label">{{label_for_name}}</label>
       <input id="name-id" name="name" style="grid-area: gi-name-input" type="text" value="{{name_new}}">
-
       <label class="{{class_for_age}}" for="age-id" style="grid-area: gi-age-label">{{label_for_age}}</label>
       <input id="age-id" name="age" style="grid-area: gi-age-input" type="text" value="{{age_new}}">
-
       <button id="greet-button-id" style="grid-area: gi-submit" type="submit">Greet</button>
     </div>
   </form>
 </div>
-
+<div class="form-container">
+  <form action="/hello-reset" method="post">
+    <button id="reset-button-id" style="width: 60%" type="submit">Reset</button>
+  </form>
+</div>
 </body>
 </html>
