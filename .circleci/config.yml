@@ -19,7 +19,7 @@ jobs:
           name: Setting up virtualenv
           command: |
             sudo pip install pipenv
-            pipenv install --dev
+            make venv-dev
       - save_cache:
           key: cc-venv-{{ checksum "Pipfile.lock" }}
           paths:
@@ -51,7 +51,7 @@ jobs:
       - run:
           name: Performing Tests
           command: |
-            pipenv run pytest .
+            make test
 
       - store_artifacts:
           path: tests/functional/artifacts/
