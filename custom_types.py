@@ -2,8 +2,13 @@ import mimetypes
 from itertools import takewhile
 from typing import NamedTuple
 from typing import Optional
+from typing import Union
 from urllib.parse import parse_qs
 from urllib.parse import urlsplit
+
+from utils import get_session_from_headers
+from validatiors import validate_age
+from validatiors import validate_name
 
 
 class HttpRequest(NamedTuple):
@@ -13,13 +18,16 @@ class HttpRequest(NamedTuple):
     file_name: Optional[str] = None
     query_string: Optional[str] = None
     content_type: Optional[str] = "text/html"
+    session: Optional[str] = None
 
     @classmethod
     def default(cls):
         return HttpRequest(original="", normal="/")
 
     @classmethod
-    def from_path(cls, path: str, method: Optional[str] = None) -> "HttpRequest":
+    def build(
+        cls, path: str, /, method: Optional[str] = None, headers: Optional = None
+    ) -> "HttpRequest":
         if not path:
             return cls.default()
 
@@ -36,26 +44,36 @@ class HttpRequest(NamedTuple):
 
         content_type, _ = mimetypes.guess_type(file_name or "index.html")
 
+        session = get_session_from_headers(headers)
+
         return HttpRequest(
-            method=method or "get",
-            original=path,
-            normal=normal,
-            file_name=file_name,
-            query_string=components.query or None,
             content_type=content_type,
+            file_name=file_name,
+            method=method or "get",
+            normal=normal,
+            original=path,
+            query_string=components.query or None,
+            session=session,
         )
 
 
 class User(NamedTuple):
-    name: str
-    age: int
+    errors: Optional[dict] = None
+
+    name: Optional[str] = None
+    age: Union[str, int, None] = None
 
     @classmethod
     def default(cls):
-        return User(name="anonymous", age=0)
+        name = "anonymous"
+        age = 0
+        return User(
+            age=age,
+            name=name,
+        )
 
     @classmethod
-    def from_query(cls, query: str) -> "User":
+    def build(cls, query: str) -> "User":
         anonymous = cls.default()
 
         try:
@@ -63,12 +81,30 @@ class User(NamedTuple):
         except ValueError:
             return anonymous
 
-        name_values = key_value_pairs.get("name", [anonymous.name])
+        name_values = key_value_pairs.get("name", [None])
         name = name_values[0]
 
-        age_values = key_value_pairs.get("age", [anonymous.age])
+        age_values = key_value_pairs.get("age", [None])
         age = age_values[0]
-        if isinstance(age, str) and age.isdecimal():
+
+        errors = {}
+
+        validations = [
+            ("name", validate_name, name),
+            ("age", validate_age, age),
+        ]
+
+        for field, validation, value in validations:
+            try:
+                validation(value)
+            except ValueError as error:
+                errors[field] = str(error)
+
+        if "age" not in errors:
             age = int(age)
 
-        return User(name=name, age=age)
+        return User(
+            age=age,
+            name=name,
+            errors=errors,
+        )

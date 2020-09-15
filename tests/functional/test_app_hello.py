@@ -30,7 +30,7 @@ def test_post(browser, request, users_data):
     age = 10
     year = date.today().year - age
 
-    anon_on_page = "Hello anonymous"
+    anon_on_page = "Hello anonymous!"
     name_on_page = f"Hello {name}"
     year_on_page = f"You was born at {year}!"
 
@@ -40,20 +40,26 @@ def test_post(browser, request, users_data):
     validate_content(page, anon_on_page)
 
     set_input_name_value(page, name)
+    set_input_age_value(page, "")
     submit(page)
     validate_redirect(page, fr"hello/?")
-    validate_content(page, name_on_page)
+    validate_content(page, anon_on_page)
 
+    set_input_name_value(page, "")
     set_input_age_value(page, str(age))
     submit(page)
     validate_redirect(page, fr"hello/?")
-    validate_content(page, anon_on_page, year_on_page)
+    validate_content(page, anon_on_page)
 
     set_input_name_value(page, name)
     set_input_age_value(page, str(age))
     submit(page)
     validate_redirect(page, fr"hello/?")
     validate_content(page, name_on_page, year_on_page)
+
+    reset(page)
+    validate_redirect(page, fr"hello/?")
+    validate_content(page, anon_on_page)
 
 
 def validate_title(page: HelloPage):
@@ -63,8 +69,11 @@ def validate_title(page: HelloPage):
 def validate_structure(page: HelloPage):
     assert "form" in page.html
 
-    button: WebElement = page.button_greet
-    assert button.tag_name == "button"
+    button_submit: WebElement = page.button_greet
+    assert button_submit.tag_name == "button"
+
+    button_reset: WebElement = page.button_reset
+    assert button_reset.tag_name == "button"
 
     input_name = page.input_name
     assert input_name.tag_name == "input"
@@ -91,12 +100,20 @@ def validate_redirect(page: HelloPage, url: str):
 
 
 def set_input_name_value(page: HelloPage, value: str):
-    page.input_name.send_keys(value)
+    page.input_name.clear()
+    if value:
+        page.input_name.send_keys(value)
 
 
 def set_input_age_value(page: HelloPage, value: str):
-    page.input_age.send_keys(value)
+    page.input_age.clear()
+    if value:
+        page.input_age.send_keys(value)
 
 
 def submit(page: HelloPage):
     page.button_greet.send_keys(Keys.RETURN)
+
+
+def reset(page: HelloPage):
+    page.button_reset.send_keys(Keys.RETURN)

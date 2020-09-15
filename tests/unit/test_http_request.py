@@ -39,7 +39,7 @@ def test():
     }
 
     for path, expected_endpoint in data_set.items():
-        got_endpoint = HttpRequest.from_path(path)
+        got_endpoint = HttpRequest.build(path)
 
         assert (
             got_endpoint == expected_endpoint
