@@ -69,7 +69,7 @@ def read_static(path: str) -> bytes:
     return content
 
 
-def get_session_from_headers(headers: Dict) -> Optional[str]:
+def get_session_from_headers(headers: Optional[Dict]) -> Optional[str]:
     """
     Returns session ID value from HTTP request headers.
     Returns None if it is impossible to get the session ID.
@@ -77,6 +77,9 @@ def get_session_from_headers(headers: Dict) -> Optional[str]:
     :param headers: dict with HTTP request headers
     :return: session ID or None
     """
+
+    if not headers:
+        return None
 
     cookie_header = headers.get("Cookie")
     if not cookie_header:
