@@ -6,6 +6,7 @@ from typing import Union
 from urllib.parse import parse_qs
 from urllib.parse import urlsplit
 
+from utils import get_session_from_headers
 from validatiors import validate_age
 from validatiors import validate_name
 
@@ -17,13 +18,16 @@ class HttpRequest(NamedTuple):
     file_name: Optional[str] = None
     query_string: Optional[str] = None
     content_type: Optional[str] = "text/html"
+    session: Optional[str] = None
 
     @classmethod
     def default(cls):
         return HttpRequest(original="", normal="/")
 
     @classmethod
-    def from_path(cls, path: str, method: Optional[str] = None) -> "HttpRequest":
+    def build(
+        cls, path: str, /, method: Optional[str] = None, headers: Optional = None
+    ) -> "HttpRequest":
         if not path:
             return cls.default()
 
@@ -40,6 +44,8 @@ class HttpRequest(NamedTuple):
 
         content_type, _ = mimetypes.guess_type(file_name or "index.html")
 
+        session = get_session_from_headers(headers)
+
         return HttpRequest(
             content_type=content_type,
             file_name=file_name,
@@ -47,6 +53,7 @@ class HttpRequest(NamedTuple):
             normal=normal,
             original=path,
             query_string=components.query or None,
+            session=session,
         )
 
 
