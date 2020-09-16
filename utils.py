@@ -1,3 +1,4 @@
+import json
 import os
 from http import cookies
 from typing import AnyStr
@@ -132,7 +133,7 @@ def build_session_header(session: str, expires: bool = False) -> str:
     return header
 
 
-def load_user_data(session: Optional[str]) -> str:
+def load_user_data(session: Optional[str]) -> Optional[str]:
     """
     Loads and returns user's data from its data file.
     User is found by session ID.
@@ -143,21 +144,19 @@ def load_user_data(session: Optional[str]) -> str:
     """
 
     if not session:
-        return ""
+        return None
 
-    data_file = settings.STORAGE_DIR / f"user_{session}.txt"
+    data_file = settings.STORAGE_DIR / f"user_{session}.json"
     if not data_file.is_file():
-        return ""
+        return None
 
     with data_file.open("r") as src:
-        data = src.read()
+        data = json.load(src)
 
-    data = to_str(data)
-
-    return data
+    return data.get("profile")
 
 
-def store_user_data(session: Optional[str], data: str) -> None:
+def store_user_data(session: Optional[str], profile: str) -> None:
     """
     Stores user's data in its data file.
     User is found by session ID.
@@ -171,9 +170,12 @@ def store_user_data(session: Optional[str], data: str) -> None:
     if not session:
         return
 
-    data_file = settings.STORAGE_DIR / f"user_{session}.txt"
+    data_file = settings.STORAGE_DIR / f"user_{session}.json"
+    data = {
+        "profile": profile,
+    }
     with data_file.open("w") as dst:
-        dst.write(data)
+        json.dump(data, dst)
 
 
 def drop_user_data(session: Optional[str]) -> None:
@@ -187,4 +189,8 @@ def drop_user_data(session: Optional[str]) -> None:
     if not session:
         return
 
-    store_user_data(session, "")
+    data_file = settings.STORAGE_DIR / f"user_{session}.json"
+    if not data_file.is_file():
+        return
+
+    data_file.unlink()
