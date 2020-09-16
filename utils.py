@@ -181,6 +181,7 @@ def store_theme(session: Optional[str], theme: Optional[str]) -> None:
         return
 
     session_data = load_session_data(session)
+
     session_data["theme"] = theme or DEFAULT_THEME
 
     store_session_data(session, session_data)
@@ -215,6 +216,7 @@ def store_profile(session: Optional[str], profile: str) -> None:
         return
 
     session_data = load_session_data(session)
+
     session_data["profile"] = profile
 
     store_session_data(session, session_data)

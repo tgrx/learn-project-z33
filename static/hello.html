@@ -49,8 +49,10 @@
   <button type="submit">Switch theme</button>
 </form>
 <hr>
-<h1>Hello {{ name_saved }}!</h1>
-<h1>You was born at {{ year }}!</h1>
+<h1>Hello {{ name_saved or "anonymous" }}!</h1>
+{% if year %}
+  <h1>You was born at {{ year }}!</h1>
+{% endif %}
 <div class="form-container">
   <form action="/hello-update" method="post">
     <div class="greet-form">
