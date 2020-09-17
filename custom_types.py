@@ -65,7 +65,7 @@ class User(NamedTuple):
 
     @classmethod
     def default(cls):
-        name = "anonymous"
+        name = ""
         age = 0
         return User(
             age=age,

@@ -1,12 +1,16 @@
+import json
 import os
 from http import cookies
+from pathlib import Path
 from typing import AnyStr
 from typing import Dict
 from typing import Optional
 
 import settings
+from consts import DEFAULT_THEME
 from consts import SESSION_AGE
 from consts import SESSION_COOKIE
+from consts import THEMES
 from errors import NotFound
 
 
@@ -132,59 +136,161 @@ def build_session_header(session: str, expires: bool = False) -> str:
     return header
 
 
-def load_user_data(session: Optional[str]) -> str:
+def switch_theme(current_theme: Optional[str]) -> str:
     """
-    Loads and returns user's data from its data file.
-    User is found by session ID.
-    Returns empty string if no session provided.
+    Returns a new theme name according to the existing one.
+    Assumes default theme if current theme is not provided.
+
+    :param current_theme: current theme
+    :return: new theme
+    """
+
+    themes = sorted(THEMES)
+    themes_fsm = {th1: th2 for th1, th2 in zip(themes, reversed(themes))}
+
+    new_theme = themes_fsm[current_theme or DEFAULT_THEME]
+
+    return new_theme
+
+
+def load_theme(session: Optional[str]) -> str:
+    """
+    Loads and returns user's current theme from its session.
+    Returns default theme if session is not provided.
 
     :param session: session ID
-    :return: user's data
+    :return: current theme
+    """
+
+    data = load_session_data(session)
+
+    return data.get("theme", DEFAULT_THEME)
+
+
+def store_theme(session: Optional[str], theme: Optional[str]) -> None:
+    """
+    Stores user's theme in its session data file.
+    User is found by session ID.
+    Does nothing if session ID is not provided.
+
+    :param session: session ID
+    :param theme: user's theme
     """
 
     if not session:
-        return ""
+        return
 
-    data_file = settings.STORAGE_DIR / f"user_{session}.txt"
+    session_data = load_session_data(session)
+
+    session_data["theme"] = theme or DEFAULT_THEME
+
+    store_session_data(session, session_data)
+
+
+def load_profile(session: Optional[str]) -> Optional[str]:
+    """
+    Loads and returns user's profile from its session.
+    User is found by session ID.
+    Returns None if session is not provided.
+
+    :param session: session ID
+    :return: user's profile (query string)
+    """
+
+    data = load_session_data(session)
+
+    return data.get("profile")
+
+
+def store_profile(session: Optional[str], profile: str) -> None:
+    """
+    Stores user's profile in its session data file.
+    User is found by session ID.
+    Does nothing if session ID is not provided.
+
+    :param session: session ID
+    :param profile: user's profile
+    """
+
+    if not session:
+        return
+
+    session_data = load_session_data(session)
+
+    session_data["profile"] = profile
+
+    store_session_data(session, session_data)
+
+
+def drop_profile(session: Optional[str]) -> None:
+    """
+    Drops user's saved profile.
+    Does nothing if session ID is not provided.
+
+    :param session: session ID
+    """
+
+    if not session:
+        return
+
+    session_data = load_session_data(session)
+    session_data["profile"] = None
+    store_session_data(session, session_data)
+
+
+def load_session_data(session: Optional[str]) -> Dict:
+    """
+    Loads user's session data from user's data file.
+    If session is not provides, returns empty dict.
+
+    :param session: session ID
+    :return: dict with session data
+    """
+
+    empty_dict = {}
+
+    if not session:
+        return empty_dict
+
+    data_file = get_data_file(session)
     if not data_file.is_file():
-        return ""
+        return empty_dict
 
     with data_file.open("r") as src:
-        data = src.read()
+        data = json.load(src)
 
-    data = to_str(data)
-
-    return data
+    return data or empty_dict
 
 
-def store_user_data(session: Optional[str], data: str) -> None:
+def store_session_data(
+    session: Optional[str], new_session_data: Optional[Dict]
+) -> None:
     """
-    Stores user's data in its data file.
-    User is found by session ID.
-    Does nothing if session ID is not provided.
-    Deletes user's data if data value is not provided.
+    Stores session data into user's data file.
+    Does nothing if no session ID provided.
 
     :param session: session ID
-    :param data: user's data
+    :param new_session_data: new session data
     """
 
     if not session:
         return
 
-    data_file = settings.STORAGE_DIR / f"user_{session}.txt"
+    session_data = load_session_data(session)
+    session_data.update(new_session_data or {})
+
+    data_file = get_data_file(session)
     with data_file.open("w") as dst:
-        dst.write(data)
+        json.dump(session_data, dst)
 
 
-def drop_user_data(session: Optional[str]) -> None:
+def get_data_file(session: Optional[str]) -> Path:
     """
-    Drops saved user's data.
-    Does nothing if session ID is not provided.
+    Returns path to the user's data file.
 
     :param session: session ID
+    :return: Path
     """
 
-    if not session:
-        return
-
-    store_user_data(session, "")
+    data_file = (settings.STORAGE_DIR / f"user_{session}.json").resolve()
+    return data_file

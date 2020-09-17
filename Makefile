@@ -23,10 +23,12 @@ test:
 
 
 .PHONY: wipe
+wipe:
 	rm -rf "${HERE}/.pytest_cache"
-	rm -rf "${HERE}/storage/*.txt"
-	rm -rf "${HERE}/tests/functional/artifacts/*.html"
-	rm -rf "${HERE}/tests/functional/artifacts/*.png"
+	rm -rf "${HERE}/storage"/*.json
+	rm -rf "${HERE}/storage"/*.txt
+	rm -rf "${HERE}/tests/functional/artifacts"/*.html
+	rm -rf "${HERE}/tests/functional/artifacts"/*.png
 
 
 .PHONY: venv

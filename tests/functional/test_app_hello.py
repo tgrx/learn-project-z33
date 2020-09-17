@@ -15,7 +15,7 @@ url = "http://localhost:8000/hello"
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get(browser, request, users_data):
+def test_get(browser, request):
     page = HelloPage(browser, url)
 
     validate_title(page)
@@ -25,7 +25,7 @@ def test_get(browser, request, users_data):
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_post(browser, request, users_data):
+def test_post(browser, request):
     name = "USER"
     age = 10
     year = date.today().year - age
