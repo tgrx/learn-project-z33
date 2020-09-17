@@ -40,6 +40,6 @@ def validate_content(page: MainPage):
 def validate_progress(page: MainPage):
     assert page.progress
     assert page.progress.tag_name == "progress"
-    assert page.progress.text == "53%"
+    assert page.progress.text == "61%"
     assert page.progress.get_attribute("max") == "26"
-    assert page.progress.get_attribute("value") == "14"
+    assert page.progress.get_attribute("value") == "16"
