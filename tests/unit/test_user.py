@@ -6,22 +6,22 @@ from custom_types import User
 @pytest.mark.unit
 def test():
     data_set = {
-        "": User(name="anonymous", age=0),
-        "age": User(name="anonymous", age=0),
+        "": User(name="", age=0),
+        "age": User(name="", age=0),
         "age=": User(
             name=None,
             age=None,
             errors={"name": "MUST NOT be empty", "age": "MUST NOT be empty"},
         ),
-        "name": User(name="anonymous", age=0),
-        "name&age": User(name="anonymous", age=0),
-        "name&age=": User(name="anonymous", age=0),
+        "name": User(name="", age=0),
+        "name&age": User(name="", age=0),
+        "name&age=": User(name="", age=0),
         "name=": User(
             name=None,
             age=None,
             errors={"name": "MUST NOT be empty", "age": "MUST NOT be empty"},
         ),
-        "name=&age": User(name="anonymous", age=0),
+        "name=&age": User(name="", age=0),
         "name=&age=10": User(name=None, age=10, errors={"name": "MUST NOT be empty"}),
         "name=test&age=": User(
             name="test", age=None, errors={"age": "MUST NOT be empty"}

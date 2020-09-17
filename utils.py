@@ -234,9 +234,7 @@ def drop_profile(session: Optional[str]) -> None:
         return
 
     session_data = load_session_data(session)
-    if "profile" in session_data:
-        del session_data["profile"]
-
+    session_data["profile"] = None
     store_session_data(session, session_data)
 
 
