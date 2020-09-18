@@ -1,6 +1,6 @@
 HERE := $(shell pwd)
 VENV := $(shell pipenv --venv)
-SRC := ${HERE}
+SRC := ${HERE}/src
 
 RUN := pipenv run
 PY := ${RUN} python
