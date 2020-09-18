@@ -39,3 +39,11 @@ venv:
 .PHONY: venv-dev
 venv-dev:
 	pipenv install --dev
+
+
+.PHONY: flask
+flask:
+	PYTHONPATH="${HERE}/flask-hello-app/" \
+	FLASK_APP="${HERE}/flask-hello-app/hello.py"\
+		${RUN} \
+			flask run
