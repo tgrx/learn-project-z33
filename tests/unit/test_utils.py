@@ -1,9 +1,9 @@
 import pytest
 
-from errors import NotFound
-from utils import read_static
-from utils import to_bytes
-from utils import to_str
+from framework.errors import NotFound
+from framework.utils import read_static
+from framework.utils import to_bytes
+from framework.utils import to_str
 
 
 @pytest.mark.unit

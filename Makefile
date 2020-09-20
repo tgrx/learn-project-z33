@@ -1,41 +1,45 @@
-HERE := $(shell pwd)
-VENV := $(shell pipenv --venv)
-SRC := ${HERE}
-
-RUN := pipenv run
-PY := ${RUN} python
+include ./Makefile.variables.mk
 
 
 .PHONY: format
 format:
-	${RUN} isort --virtual-env "${VENV}" "${SRC}"
-	${RUN} black "${SRC}"
+	$(call log, rearranging imports and making code black)
+	$(RUN) isort --virtual-env "$(VENV_DIR)" "$(SRC_DIR)"
+	$(RUN) isort --virtual-env "$(VENV_DIR)" "$(TESTS_DIR)"
+	$(RUN) black "$(SRC_DIR)"
+	$(RUN) black "$(TESTS_DIR)"
 
 
 .PHONY: run
+run: export PYTHONPATH = $(SRC_DIR)
 run:
-	${PY} -m app
+	$(call log, running development web server)
+	$(PY) -m app
 
 
 .PHONY: test
 test:
-	${RUN} pytest .
+	$(call log, running tests)
+	$(RUN) pytest .
 
 
 .PHONY: wipe
 wipe:
-	rm -rf "${HERE}/.pytest_cache"
-	rm -rf "${HERE}/storage"/*.json
-	rm -rf "${HERE}/storage"/*.txt
-	rm -rf "${HERE}/tests/functional/artifacts"/*.html
-	rm -rf "${HERE}/tests/functional/artifacts"/*.png
+	$(call log, wiping garbage)
+	rm -rf "$(PROJECT_DIR)/.pytest_cache"
+	rm -rf "$(PROJECT_DIR)/storage"/*.json
+	rm -rf "$(PROJECT_DIR)/storage"/*.txt
+	rm -rf "$(PROJECT_DIR)/tests/functional/artifacts"/*.html
+	rm -rf "$(PROJECT_DIR)/tests/functional/artifacts"/*.png
 
 
 .PHONY: venv
 venv:
-	pipenv install
+	$(call log, installing packages for venv)
+	@$(PIPENV_INSTALL)
 
 
 .PHONY: venv-dev
 venv-dev:
-	pipenv install --dev
+	$(call log, installing dev packages for venv)
+	@$(PIPENV_INSTALL) --dev

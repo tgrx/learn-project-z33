@@ -45,21 +45,21 @@
   <link href="/s/theme_{{ theme }}.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<form method="post" action="/theme">
+<form action="/theme" method="post">
   <button type="submit">Switch theme</button>
 </form>
 <hr>
 <h1>Hello {{ name_saved or "anonymous" }}!</h1>
 {% if year %}
-  <h1>You was born at {{ year }}!</h1>
+<h1>You was born at {{ year }}!</h1>
 {% endif %}
 <div class="form-container">
   <form action="/hello-update" method="post">
     <div class="greet-form">
       <label class="{{ class_for_name }}" for="name-id" style="grid-area: gi-name-label">{{ label_for_name }}</label>
-      <input placeholder="anonymous" id="name-id" name="name" style="grid-area: gi-name-input" type="text" value="{{ name_new }}">
+      <input id="name-id" name="name" placeholder="anonymous" style="grid-area: gi-name-input" type="text" value="{{ name_new }}">
       <label class="{{ class_for_age }}" for="age-id" style="grid-area: gi-age-label">{{ label_for_age }}</label>
-      <input placeholder="1488" id="age-id" name="age" style="grid-area: gi-age-input" type="text" value="{{ age_new }}">
+      <input id="age-id" name="age" placeholder="1488" style="grid-area: gi-age-input" type="text" value="{{ age_new }}">
       <button id="greet-button-id" style="grid-area: gi-submit" type="submit">Greet</button>
     </div>
   </form>

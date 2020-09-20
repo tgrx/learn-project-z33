@@ -1,7 +1,7 @@
 import socketserver
 
-import settings
-from server import MyHttp
+from framework import settings
+from framework.server import MyHttp
 
 
 def server_greet():
