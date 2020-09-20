@@ -26,7 +26,7 @@ class Redirect(HttpControl):
     code = 302
 
     def __init__(
-            self, to: str, /, headers: Optional[Dict] = None, body: Optional[str] = None
+        self, to: str, /, headers: Optional[Dict] = None, body: Optional[str] = None
     ):
         self.__body = body
         self.__headers = headers or {}

@@ -57,10 +57,10 @@ def reset(request: HttpRequest) -> NoReturn:
 
 
 def _build_context(
-        request,
-        /,
-        user_saved,
-        user_new,
+    request,
+    /,
+    user_saved,
+    user_new,
 ) -> Dict:
     css_class_for_name = css_class_for_age = ""
     label_for_name = "Your name: "

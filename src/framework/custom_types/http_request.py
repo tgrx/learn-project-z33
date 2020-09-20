@@ -29,12 +29,12 @@ class HttpRequest(NamedTuple):
 
     @classmethod
     def build(
-            cls,
-            /,
-            url: str,
-            method: Optional[str] = None,
-            headers: Optional[Dict] = None,
-            form_data: Optional[str] = None,
+        cls,
+        /,
+        url: str,
+        method: Optional[str] = None,
+        headers: Optional[Dict] = None,
+        form_data: Optional[str] = None,
     ) -> "HttpRequest":
         if not url:
             return cls.default()
