@@ -1,6 +1,8 @@
+from urllib.parse import parse_qs
+
 import pytest
 
-from custom_types import User
+from framework.custom_types import User
 
 
 @pytest.mark.unit
@@ -30,7 +32,7 @@ def test():
     }
 
     for qs, expected in data_set.items():
-        got = User.build(qs)
+        got = User.build(parse_qs(qs))
 
         assert got == expected, (
             f"user data mismatch:"

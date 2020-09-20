@@ -4,7 +4,7 @@ from pathlib import Path
 PORT = int(os.getenv("PORT", 8000))
 CACHE_AGE = 60 * 60 * 24
 
-PROJECT_DIR = Path(__file__).parent.parent.resolve()
+PROJECT_DIR = Path(__file__).parent.parent.parent.resolve()
 
 STATIC_DIR = PROJECT_DIR / "static"
 assert STATIC_DIR.is_dir(), f"missing directory: STATIC_DIR=`{STATIC_DIR}`"
