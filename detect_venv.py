@@ -1,4 +1,18 @@
+import os
 import sys
+
+
+def get_dynaconf_env():
+    var_name = "ENV_FOR_DYNACONF"
+    default_env = "development"
+
+    try:
+        from dynaconf import settings
+        env = settings.get(var_name)
+    except ImportError:
+        env = os.getenv(var_name)
+
+    return env or default_env
 
 
 def get_base_prefix_compat():
@@ -16,6 +30,9 @@ def get_base_prefix_compat():
 
 
 def in_virtualenv():
+    env = get_dynaconf_env()
+    if env == "heroku":
+        return True
     return get_base_prefix_compat() != sys.prefix
 
 

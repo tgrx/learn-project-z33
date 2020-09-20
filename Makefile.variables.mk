@@ -33,11 +33,15 @@ endif
 
 PY := $(RUN) python
 SRC_DIR := $(PROJECT_DIR)/src
+TESTS_DIR := $(PROJECT_DIR)/tests
 
 
 # -----------------------------------------------
 # functions
-
 define log
-	@tput bold; tput setab 0; tput setaf 4; echo ">>>>>>>>>>>>>>>>    $(1)    "; tput sgr0;
+	@tput bold 2>/dev/null || exit 0
+	@tput setab 0  2>/dev/null || exit 0
+	@tput setaf 4  2>/dev/null || exit 0
+	@echo ">>>>>>>>>>>>>>>>    $(1)    "
+	@tput sgr0  2>/dev/null || exit 0
 endef

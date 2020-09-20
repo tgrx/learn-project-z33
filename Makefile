@@ -5,7 +5,9 @@ include ./Makefile.variables.mk
 format:
 	$(call log, rearranging imports and making code black)
 	$(RUN) isort --virtual-env "$(VENV_DIR)" "$(SRC_DIR)"
+	$(RUN) isort --virtual-env "$(VENV_DIR)" "$(TESTS_DIR)"
 	$(RUN) black "$(SRC_DIR)"
+	$(RUN) black "$(TESTS_DIR)"
 
 
 .PHONY: run

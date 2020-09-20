@@ -56,7 +56,12 @@ def reset(request: HttpRequest) -> NoReturn:
     raise Redirect("/hello", headers=request.session.headers)
 
 
-def _build_context(request, /, user_saved, user_new, ) -> Dict:
+def _build_context(
+        request,
+        /,
+        user_saved,
+        user_new,
+) -> Dict:
     css_class_for_name = css_class_for_age = ""
     label_for_name = "Your name: "
     label_for_age = "Your age: "
@@ -66,7 +71,7 @@ def _build_context(request, /, user_saved, user_new, ) -> Dict:
 
     year = date.today().year - age_saved if age_saved is not None else None
 
-    errors = (user_new.errors or {})
+    errors = user_new.errors or {}
 
     if error := errors.get("name", None):
         label_for_name = f"ERROR: {error}"

@@ -23,11 +23,14 @@ class HttpRequest(NamedTuple):
 
     @classmethod
     def default(cls):
-        return HttpRequest()
+        return HttpRequest(
+            headers={}, GET={}, POST={}, session=Session(), content_type="text/html"
+        )
 
     @classmethod
     def build(
-            cls, /,
+            cls,
+            /,
             url: str,
             method: Optional[str] = None,
             headers: Optional[Dict] = None,
