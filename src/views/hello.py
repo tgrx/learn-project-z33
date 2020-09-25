@@ -24,7 +24,7 @@ def index(request: HttpRequest) -> HttpResponse:
     context = _build_context(request, user_new=user_saved, user_saved=user_saved)
 
     html = render_html("hello.html", context)
-    return HttpResponse(status_code=400, body=html)
+    return HttpResponse(status_code=200, body=html)
 
 
 def update(request: HttpRequest) -> Union[HttpResponse, NoReturn]:
