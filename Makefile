@@ -11,7 +11,6 @@ format:
 
 
 .PHONY: run
-run: export PYTHONPATH = $(SRC_DIR)
 run:
 	$(call log, running development web server)
 	$(PY) -m app

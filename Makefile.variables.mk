@@ -45,3 +45,13 @@ define log
 	@echo ">>>>>>>>>>>>>>>>    $(1)    "
 	@tput sgr0  2>/dev/null || exit 0
 endef
+
+
+# -----------------------------------------------
+# OS-depend actions
+
+ifeq ($(OS), Windows_NT)
+	set PYTHONPATH=$(SRC_DIR)
+else
+	export PYTHONPATH=$(SRC_DIR)
+endif
