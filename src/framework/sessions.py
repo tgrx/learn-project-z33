@@ -98,7 +98,7 @@ class Session:
         session = sessions.get(self.__session_id, {})
         expired_at_s = session.get("_expired_at")
         if expired_at_s:
-            expired_at = delorean.parse(expired_at_s)
+            expired_at = delorean.parse(expired_at_s, dayfirst=False, yearfirst=True)
             if expired_at <= delorean.utcnow():
                 return {}
         return session
