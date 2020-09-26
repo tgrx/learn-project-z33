@@ -13,7 +13,7 @@ format:
 .PHONY: run
 run:
 	$(call log, running development web server)
-	$(PY) -m app
+	$(PY) src/manage.py runserver
 
 
 .PHONY: test
