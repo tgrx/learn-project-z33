@@ -1,0 +1,27 @@
+default:
+  ALLOWED_HOSTS: [ ]
+  DATABASE_URL: ""
+  DEBUG: false
+  DIRS_EXCLUDED:
+    - .idea
+    - storage
+  DIRS_RESOURCES:
+    - config
+  DIRS_SOURCES:
+    - src
+  DIRS_TEMPLATES: []
+  PORT: 0
+  SECRET_KEY: ""
+  TEMPLATE_ENGINE: "Django"
+  VENV_SYNTHETIC: false
+
+development:
+  DEBUG: true
+  PORT: 8000
+  SECRET_KEY: "1"
+
+heroku:
+  ALLOWED_HOSTS:
+    - "learn-project-z33.herokuapp.com"
+  DEBUG: false
+  VENV_SYNTHETIC: true

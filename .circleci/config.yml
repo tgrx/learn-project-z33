@@ -46,19 +46,13 @@ jobs:
           background: true
       - run:
           name: (Running Local Web Server)
-          command: pipenv run python -m app
+          command: make run
           background: true
 
       - run:
           name: Performing Tests
           command: |
             make test
-
-      - store_artifacts:
-          path: tests/functional/artifacts/
-          destination: tr1
-      - store_test_results:
-          path: tests/functional/artifacts/
 
 workflows:
   main:

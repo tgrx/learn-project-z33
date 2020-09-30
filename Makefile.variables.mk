@@ -1,43 +1,65 @@
 # -----------------------------------------------
 # independent variables
 
-VENV_DIR := $(shell pipenv --venv)
+DIR_VENV := $(shell pipenv --venv 2>/dev/null)
 
 
 # -----------------------------------------------
 # OS-depend variables
 
 ifeq ($(OS), Windows_NT)
-	PROJECT_DIR := $(shell cd)
+
+DIR_REPO := $(shell cd)
+
 else
-	PROJECT_DIR := $(shell pwd)
+
+DIR_REPO := $(shell pwd)
+
 endif
 
 
 # -----------------------------------------------
+# Paths
+
+DIR_SCRIPTS = $(DIR_REPO)/scripts
+DIR_SRC := $(DIR_REPO)/src
+DIR_TESTS := $(DIR_REPO)/tests
+
+# -----------------------------------------------
 # Virtualenv-depend variables
 
-ifeq ($(shell python -m detect_venv), True)
-	IN_VENV := True
-	RUN :=
-	PIPENV_INSTALL := echo Cannot create venv under venv
+ifeq ($(shell python "$(DIR_SCRIPTS)/detect_venv.py"), True)
+
+IN_VENV := True
+RUN :=
+PIPENV_INSTALL := echo Cannot create venv under venv
+
 else
-	IN_VENV := False
-	RUN := pipenv run
-	PIPENV_INSTALL := pipenv install
+
+IN_VENV := False
+RUN := pipenv run
+PIPENV_INSTALL := pipenv install
+
 endif
 
 
 # -----------------------------------------------
 # calculated variables
 
-PY := $(RUN) python
-SRC_DIR := $(PROJECT_DIR)/src
-TESTS_DIR := $(PROJECT_DIR)/tests
+PYTHON := $(RUN) python
 
 
 # -----------------------------------------------
-# functions
+# OS-depend actions
+
+ifeq ($(OS), Windows_NT)
+
+define log
+	@echo ">>>>>>>>>>>>>>>>    $(1)"
+endef
+
+else
+
 define log
 	@tput bold 2>/dev/null || exit 0
 	@tput setab 0  2>/dev/null || exit 0
@@ -46,12 +68,4 @@ define log
 	@tput sgr0  2>/dev/null || exit 0
 endef
 
-
-# -----------------------------------------------
-# OS-depend actions
-
-ifeq ($(OS), Windows_NT)
-	set PYTHONPATH=$(SRC_DIR)
-else
-	export PYTHONPATH=$(SRC_DIR)
 endif
