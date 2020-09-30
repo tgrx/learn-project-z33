@@ -67,7 +67,7 @@ PROJECT_FOLDERS = list(
 
 
 def main():
-    iml = DIR_IDEA / "learn-project.iml"
+    iml = DIR_IDEA / "learn-project-z33.iml"
     tree = build_tree(iml)
     root = get_root(tree)
     setup_new_module_root_manager(root)

@@ -4,7 +4,6 @@ default:
   DEBUG: false
   DIRS_EXCLUDED:
     - .idea
-    - storage
   DIRS_RESOURCES:
     - config
   DIRS_SOURCES:

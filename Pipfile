@@ -17,6 +17,7 @@ pytest-selenium = "*"
 [packages]
 delorean = "*"
 django = "*"
+dynaconf = {extras = ["yaml"], version = "*"}
 jinja2 = "*"
 
 [requires]
