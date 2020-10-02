@@ -71,8 +71,8 @@ pip-wheel-metadata/
 profile_default/
 sdist/
 share/python-wheels/
-storage/*.json
-storage/*.txt
+**/storage/*.json
+**/storage/*.txt
 target/
 var/
 venv.bak/
