@@ -9,3 +9,5 @@ class HelloForm(forms.Form):
         name = self.cleaned_data["name"]
         if not name.startswith("a"):
             raise forms.ValidationError("name must starts with 'a'")
+
+        return name
