@@ -36,7 +36,7 @@ def update(request: HttpRequest) -> Union[HttpResponse, NoReturn]:
 
     if not user_new.errors:
         profile_new = asdict(user_new)
-        profile_saved.update(profile_new)
+        profile_saved.view_update(profile_new)
         request.session["profile"] = profile_saved
         raise Redirect("/hello", headers=request.session.headers)
 

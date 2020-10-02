@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.urls import include
 from django.urls import path
 
-from applications.hello.views import index
+from applications.hello.views import view_index
 
 
 def view_index(request: HttpRequest):

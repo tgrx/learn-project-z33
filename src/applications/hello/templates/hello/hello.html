@@ -66,8 +66,9 @@
   </form>
 </div>
 <div class="form-container">
-  <form action="/hello-reset" method="post">
+  <form action="/hello/reset/" method="post">
     <button id="reset-button-id" style="width: 60%" type="submit">Reset</button>
+    {% csrf_token %}
   </form>
 </div>
 </body>
