@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +46,7 @@
       padding: 1rem;
     }
   </style>
-  <link href="/s/theme_{{ theme }}.css" rel="stylesheet" type="text/css">
+  <link href="{% static 'hello/styles/theme_dark.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <form action="/theme" method="post">

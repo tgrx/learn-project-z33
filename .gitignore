@@ -34,6 +34,7 @@
 .secrets.*
 .spyderproject
 .spyproject
+.static
 .tox/
 .venv
 .webassets-cache

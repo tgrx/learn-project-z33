@@ -19,6 +19,7 @@ delorean = "*"
 django = "*"
 dynaconf = {extras = ["yaml"], version = "*"}
 jinja2 = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"

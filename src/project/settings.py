@@ -1,6 +1,8 @@
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+REPO_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = REPO_DIR / "src"
+PROJECT_DIR = BASE_DIR / "project"
 
 SECRET_KEY = "47^z241-=2*_qo6z@7=1x6kq%t)5@s)#7ov_sa!7*za&i#22-!"
 
@@ -22,6 +24,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -98,4 +101,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = "/xxx/"
+STATICFILES_DIRS = [
+    PROJECT_DIR / "static",
+]
+STATIC_ROOT = REPO_DIR / ".static"
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
