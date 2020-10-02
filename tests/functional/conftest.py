@@ -1,6 +1,6 @@
 import pytest
-
 from framework import settings
+
 from tests.functional.utils import build_chrome
 
 

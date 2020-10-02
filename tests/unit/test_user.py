@@ -1,7 +1,6 @@
 from urllib.parse import parse_qs
 
 import pytest
-
 from framework.custom_types import User
 
 

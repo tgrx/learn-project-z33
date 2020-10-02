@@ -28,26 +28,12 @@ def view_hello_form_valid(request: HttpRequest, form: HelloForm) -> HttpResponse
 
 
 def view_hello_form_invalid(request: HttpRequest, form: HelloForm) -> HttpResponse:
-    class_for_name = class_for_age = ""
-    label_for_name = "Name:"
-    label_for_age = "Age:"
-
-    if "name" in form.errors:
-        class_for_name = "error"
-        label_for_name = form.errors["name"][0]
-
-    if "age" in form.errors:
-        class_for_age = "error"
-        label_for_age = form.errors["age"][0]
-
     context = build_context_for_hello(request)
 
-    context.update({
-        "class_for_name": class_for_name,
-        "label_for_name": label_for_name,
-        "class_for_age": class_for_age,
-        "label_for_age": label_for_age,
-        "form": form,
-    })
+    context.update(
+        {
+            "form": form,
+        }
+    )
 
     return render(request, "hello/hello.html", locals())

@@ -1,5 +1,4 @@
 import pytest
-
 from framework.errors import NotFound
 from framework.utils import read_static
 from framework.utils import to_bytes

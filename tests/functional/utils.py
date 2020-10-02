@@ -1,9 +1,8 @@
 from datetime import datetime
 from functools import wraps
 
-from selenium import webdriver
-
 from framework import settings
+from selenium import webdriver
 
 
 def build_chrome():

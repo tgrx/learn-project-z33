@@ -1,7 +1,6 @@
 from typing import Dict
 
 import pytest
-
 from framework.custom_types import HttpRequest
 
 
