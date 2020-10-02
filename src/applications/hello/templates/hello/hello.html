@@ -55,13 +55,8 @@
 {% endif %}
 <div class="form-container">
   <form action="/hello/update/" method="post">
-    <div class="greet-form">
-      <label class="{{ class_for_name }}" for="name-id" style="grid-area: gi-name-label">{{ label_for_name }}</label>
-      <input id="name-id" name="name" placeholder="anonymous" style="grid-area: gi-name-input" type="text" value="{{ name_new }}">
-      <label class="{{ class_for_age }}" for="age-id" style="grid-area: gi-age-label">{{ label_for_age }}</label>
-      <input id="age-id" name="age" placeholder="1488" style="grid-area: gi-age-input" type="text" value="{{ age_new }}">
-      <button id="greet-button-id" style="grid-area: gi-submit" type="submit">Greet</button>
-    </div>
+    {{ form.as_p }}
+    <button id="greet-button-id" style="grid-area: gi-submit" type="submit">Greet</button>
     {% csrf_token %}
   </form>
 </div>
