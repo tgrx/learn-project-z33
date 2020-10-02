@@ -17,25 +17,28 @@
       display: grid;
       grid-column-gap: 0.2rem;
       grid-row-gap: 1rem;
-      grid-template-areas:
-        "gi-name-label  gi-name-label"
-        "gi-name-input  gi-empty-12"
-        "gi-empty-21    gi-empty-22"
-        "gi-age-label   gi-age-label"
-        "gi-age-input   gi-empty-32"
-        "gi-empty-41    gi-empty-42"
-        "gi-submit      gi-empty-52";
+      grid-template-columns: 100%;
+      grid-template-rows: repeat(5, 1fr);
+    }
+
+    .greet-form > * {
+      grid-column: 1/1;
+    }
+
+    .greet-form input {
+      width: 100%;
     }
 
     .form-container > * {
+      height: 400px;
       left: 0;
-      margin: auto;
+      margin: 10px auto;
       padding-left: var(--padding-left);
       padding-top: var(--padding-top);
       width: 40%;
     }
 
-    .error {
+    .errorlist {
       background-color: darkred;
       color: white;
       font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
@@ -51,12 +54,14 @@
 <hr>
 <h1>Hello {{ name_saved|default:"anonymous" }}!</h1>
 {% if year %}
-<h1>You was born at {{ year }}!</h1>
+  <h1>You was born at {{ year }}!</h1>
 {% endif %}
 <div class="form-container">
   <form action="/hello/update/" method="post">
-    {{ form.as_p }}
-    <button id="greet-button-id" style="grid-area: gi-submit" type="submit">Greet</button>
+    <div class="greet-form">
+      {{ form.as_p }}
+      <button id="greet-button-id" type="submit">Greet</button>
+    </div>
     {% csrf_token %}
   </form>
 </div>
