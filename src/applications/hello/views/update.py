@@ -15,7 +15,8 @@ def view_update(request: HttpRequest) -> HttpResponse:
         False: view_hello_form_invalid,
     }
 
-    action = actions[form.is_valid()]
+    form_valid = form.is_valid()
+    action = actions[form_valid]
 
     return action(request, form)
 
@@ -36,4 +37,4 @@ def view_hello_form_invalid(request: HttpRequest, form: HelloForm) -> HttpRespon
         }
     )
 
-    return render(request, "hello/hello.html", locals())
+    return render(request, "hello/hello.html", context)

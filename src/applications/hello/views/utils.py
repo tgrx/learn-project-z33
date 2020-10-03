@@ -21,14 +21,21 @@ def build_context_for_hello(request: HttpRequest) -> Dict:
     if name_saved:
         name_new = name_saved
 
+    form = HelloForm(
+        initial=dict(
+            name=name_new,
+            age=age_new,
+        )
+    )
+
     context = {
         "age_new": age_new,
         "age_saved": age_saved,
+        "form": form,
         "name_new": name_new,
         "name_saved": name_saved or "anonymous",
         "theme": "dark",
         "year": year,
-        "form": HelloForm(),
     }
 
     return context
