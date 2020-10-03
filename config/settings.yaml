@@ -4,6 +4,7 @@ default:
   DEBUG: false
   DIRS_EXCLUDED:
     - .idea
+    - .pytest_cache
   DIRS_RESOURCES:
     - config
   DIRS_SOURCES:
