@@ -1,8 +1,10 @@
 from datetime import datetime
 from functools import wraps
+from pathlib import Path
 
-from framework import settings
 from selenium import webdriver
+
+ARTIFACTS_DIR = (Path(__file__).parent / "artifacts").resolve()
 
 
 def build_chrome():
@@ -25,8 +27,8 @@ def screenshot_on_failure(test):
             test_name = f"{request.module.__name__}.{test.__name__}"
             png = f"{test_name}.{ts}.png"
             html = f"{test_name}.{ts}.html"
-            png_path = (settings.ARTIFACTS_DIR / png).resolve()
-            html_path = (settings.ARTIFACTS_DIR / html).resolve()
+            png_path = (ARTIFACTS_DIR / png).resolve()
+            html_path = (ARTIFACTS_DIR / html).resolve()
             with html_path.open("w") as _dst:
                 _dst.write(browser.page_source)
             browser.save_screenshot(png_path.as_posix())

@@ -8,24 +8,18 @@ url = "http://localhost:8000"
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test(browser, request, main_css):
+def test(browser, request):
     page = MainPage(browser, url)
 
     validate_title(page)
     validate_content(page)
     validate_progress(page)
     validate_logo(page)
-    validate_css(page, main_css)
 
 
 def validate_logo(page: MainPage):
     assert "svg" in page.logo
     assert "Z33" in page.logo
-
-
-def validate_css(page: MainPage, main_css: str):
-    page_main_css = page.main_css
-    assert main_css in page_main_css
 
 
 def validate_title(page: MainPage):

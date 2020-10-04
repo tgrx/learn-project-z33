@@ -7,9 +7,12 @@ default:
     - .pytest_cache
   DIRS_RESOURCES:
     - config
+    - src/applications/hello/static
+    - src/project/static
   DIRS_SOURCES:
     - src
-  DIRS_TEMPLATES: []
+  DIRS_TEMPLATES:
+    - src/applications/hello/templates
   PORT: 0
   SECRET_KEY: ""
   TEMPLATE_ENGINE: "Django"
