@@ -11,10 +11,15 @@ url = "http://localhost:8000"
 def test(browser, request):
     page = MainPage(browser, url)
 
+    validate_favicon(page)
     validate_title(page)
     validate_content(page)
     validate_progress(page)
     validate_logo(page)
+
+
+def validate_favicon(page: MainPage):
+    assert "s/images/logo.svg" in page.favicon.get_attribute("href")
 
 
 def validate_logo(page: MainPage):
@@ -23,7 +28,7 @@ def validate_logo(page: MainPage):
 
 
 def validate_title(page: MainPage):
-    assert "Study Project Z33" in page.title
+    assert "Z33" == page.title
 
 
 def validate_content(page: MainPage):
@@ -34,6 +39,6 @@ def validate_content(page: MainPage):
 def validate_progress(page: MainPage):
     assert page.progress
     assert page.progress.tag_name == "progress"
-    assert page.progress.text == "69%"
+    assert page.progress.text == "76%"
     assert page.progress.get_attribute("max") == "26"
-    assert page.progress.get_attribute("value") == "18"
+    assert page.progress.get_attribute("value") == "20"

@@ -24,7 +24,7 @@ run:
 test:
 	$(call log, running tests)
 	$(RUN) pytest .
-	$(RUN) isort --virtual-env="$(DIR_VENV)" -check-only "$(DIR_SRC)" "$(DIR_TESTS)" "$(DIR_SCRIPTS)"
+	$(RUN) isort --virtual-env="$(DIR_VENV)" --check-only "$(DIR_SRC)" "$(DIR_TESTS)" "$(DIR_SCRIPTS)"
 	$(RUN) black --check "$(DIR_SRC)" "$(DIR_TESTS)" "$(DIR_SCRIPTS)"
 
 
@@ -66,13 +66,13 @@ resetdb:  dropdb createdb migrations migrate
 .PHONY: dropdb
 dropdb:
 	$(call log, dropping database)
-	psql -d postgres -c "DROP DATABASE IF EXISTS $(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py);"
+	psql -d postgres -c "DROP DATABASE IF EXISTS \"$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py)\";"
 
 
 .PHONY: createdb
 createdb:
 	$(call log, creating database)
-	psql -d postgres -c "CREATE DATABASE $(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py);"
+	psql -d postgres -c "CREATE DATABASE \"$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py)\";"
 
 
 .PHONY: venv

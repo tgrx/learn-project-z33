@@ -13,6 +13,7 @@ default:
     - src
   DIRS_TEMPLATES:
     - src/applications/hello/templates
+    - src/applications/home/templates
   PROJECT_NAME: ""
   SECRET_KEY: ""
   TEMPLATE_ENGINE: "Django"

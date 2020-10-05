@@ -1,4 +1,8 @@
+import os
 from pathlib import Path
+
+import dj_database_url
+from dynaconf import settings as _ds
 
 REPO_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = REPO_DIR / "src"
@@ -10,7 +14,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -20,6 +23,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # -------------------------
     "applications.hello.apps.HelloConfig",
+    "applications.home.apps.HomeConfig",
 ]
 
 MIDDLEWARE = [
@@ -53,17 +57,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "project.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+database_url = _ds.DATABASE_URL
+if _ds.ENV_FOR_DYNACONF == "heroku":
+    database_url = os.getenv("DATABASE_URL")
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.parse(database_url),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -83,7 +83,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -97,11 +96,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = "/xxx/"
+STATIC_URL = "/s/"
 STATICFILES_DIRS = [
     PROJECT_DIR / "static",
 ]

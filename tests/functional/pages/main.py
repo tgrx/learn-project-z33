@@ -7,4 +7,5 @@ from .abstract import PageResource
 
 class MainPage(PageObject):
     progress = PageElement(By.CSS_SELECTOR, "progress#progress")
-    logo = PageResource("/i/logo.svg")
+    logo = PageResource("/s/images/logo.svg")
+    favicon = PageElement(By.CSS_SELECTOR, 'head > link[rel="shortcut icon"]')
