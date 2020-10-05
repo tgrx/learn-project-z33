@@ -3,24 +3,14 @@ version: 2.1
 workflows:
   main:
     jobs:
-      - build:
-          context:
-            - build-envs-01
-            - docker-hub-creds
-      - infra:
-          requires:
-            - build
-          context:
-            - build-envs-01
-      - test:
-          requires:
-            - build
-            - infra
-          context:
-            - build-envs-01
+      - build-and-test
 
 jobs:
-  build:
+  build-and-test:
+    context:
+      - build-envs-01
+      - docker-hub-creds
+
     docker:
       - image: circleci/python:3.8.5-browsers
         auth:
@@ -57,8 +47,6 @@ jobs:
           paths:
             - ./selenium.jar
 
-  infra:
-    steps:
       - run:
           name: (Running Selenium)
           command: java -jar selenium.jar -log tests/functional/artifacts/selenium.log
@@ -68,8 +56,6 @@ jobs:
           command: make run
           background: true
 
-  test:
-    steps:
       - run:
           name: Performing Tests
           command: |
