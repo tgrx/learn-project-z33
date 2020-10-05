@@ -1,43 +1,31 @@
-include Makefile.variables.mk
-
-
-.PHONY: setup
-setup:
-	$(call log, setting up everything)
-	$(PYTHON) $(DIR_SCRIPTS)/setup_pycharm.py
+include ./Makefile.in.mk
 
 
 .PHONY: format
 format:
 	$(call log, reorganizing imports & formatting code)
-	$(RUN) isort --virtual-env="$(DIR_VENV)" "$(DIR_SRC)" "$(DIR_TESTS)" "$(DIR_SCRIPTS)"
-	$(RUN) black "$(DIR_SRC)" "$(DIR_TESTS)" "$(DIR_SCRIPTS)"
-
-
-.PHONY: run
-run:
-	$(call log, starting django server)
-	$(PYTHON) src/manage.py runserver
+	$(RUN) isort --virtual-env="$(DIR_VENV)" "$(DIR_SRC)" "$(DIR_SCRIPTS)" "$(DIR_TESTS)"
+	$(RUN) black "$(DIR_SRC)" "$(DIR_SCRIPTS)" "$(DIR_TESTS)"
 
 
 .PHONY: test
 test:
 	$(call log, running tests)
-	$(RUN) pytest .
-	$(RUN) isort --virtual-env="$(DIR_VENV)" --check-only "$(DIR_SRC)" "$(DIR_TESTS)" "$(DIR_SCRIPTS)"
-	$(RUN) black --check "$(DIR_SRC)" "$(DIR_TESTS)" "$(DIR_SCRIPTS)"
+	$(RUN) pytest
+	$(RUN) isort --virtual-env="$(DIR_VENV)" --check-only "$(DIR_SRC)" "$(DIR_SCRIPTS)" "$(DIR_TESTS)"
+	$(RUN) black --check "$(DIR_SRC)" "$(DIR_SCRIPTS)" "$(DIR_TESTS)"
 
 
-.PHONY: migrate
-migrate:
-	$(call log, applying migrations)
-	$(PYTHON) src/manage.py migrate
+.PHONY: run
+run:
+	$(call log, starting local web server)
+	$(PYTHON) src/manage.py runserver
 
 
-.PHONY: migrations
-migrations:
-	$(call log, generating migrations)
-	$(PYTHON) src/manage.py makemigrations
+.PHONY: run-prod
+run-prod:
+	$(call log, starting local web server)
+	$(RUN) gunicorn --config="$(DIR_SCRIPTS)/gunicorn.conf.py" framework.wsgi:application
 
 
 .PHONY: su
@@ -48,8 +36,36 @@ su:
 
 .PHONY: sh
 sh:
-	$(call log, starting django shell)
-	$(PYTHON) src/manage.py shell
+	$(call log, starting Python shell)
+	$(RUN) ipython
+
+
+.PHONY: venv
+venv:
+	$(call log, installing packages)
+	$(PIPENV_INSTALL)
+
+
+.PHONY: venv-dev
+venv-dev:
+	$(call log, installing development packages)
+	$(PIPENV_INSTALL) --dev
+
+
+.PHONY: pycharm
+pycharm:
+	$(call log, setting pycharm up)
+	$(PYTHON) $(DIR_SCRIPTS)/setup_pycharm.py
+
+
+.PHONY: db
+db: resetdb
+	$(call log, setting db up)
+
+
+.PHONY: data
+data: static
+	$(call log, preparing data)
 
 
 .PHONY: static
@@ -75,13 +91,13 @@ createdb:
 	psql -d postgres -c "CREATE DATABASE \"$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py)\";"
 
 
-.PHONY: venv
-venv:
-	$(call log, installing packages for venv)
-	@$(PIPENV_INSTALL)
+.PHONY: migrate
+migrate:
+	$(call log, applying migrations)
+	$(PYTHON) src/manage.py migrate
 
 
-.PHONY: venv-dev
-venv-dev:
-	$(call log, installing dev packages for venv)
-	@$(PIPENV_INSTALL) --dev
+.PHONY: migrations
+migrations:
+	$(call log, generating migrations)
+	$(PYTHON) src/manage.py makemigrations

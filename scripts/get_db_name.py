@@ -1,12 +1,4 @@
-from urllib.parse import urlsplit
-
-from dynaconf import settings
-
-
-def get_db_name():
-    url = urlsplit(settings.DATABASE_URL)
-    name = url.path.replace("/", "")
-    return name
+from utils import get_db_name
 
 
 def main():
