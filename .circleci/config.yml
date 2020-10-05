@@ -5,11 +5,14 @@ workflows:
     jobs:
       - build-and-test:
           context:
-            - build-envs-01
             - docker-hub-creds
 
 jobs:
   build-and-test:
+    environment:
+      PIPENV_VENV_IN_PROJECT: 1
+      PYTHONPATH: src
+
     docker:
       - image: circleci/python:3.8.5-browsers
         auth:
