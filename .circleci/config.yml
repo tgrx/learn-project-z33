@@ -41,8 +41,7 @@ jobs:
           command: |
             scripts/wait_for_postgresql.sh || exit 1
 
-      - postgres/install_postgres_client:
-          name: Installing psql
+      - postgres/install_postgres_client
 
       - restore_cache:
           keys:
