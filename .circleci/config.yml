@@ -1,13 +1,30 @@
 version: 2.1
 
+workflows:
+  main:
+    jobs:
+      - build:
+          context:
+            - build-envs-01
+            - docker-hub-creds
+      - infra:
+          requires: build
+          context:
+            - build-envs-01
+      - test:
+          requires:
+            - build
+            - infra
+          context:
+            - build-envs-01
+
 jobs:
-  build-and-test:
+  build:
     docker:
       - image: circleci/python:3.8.5-browsers
-
-    environment:
-      PIPENV_VENV_IN_PROJECT: 1
-      PYTHONPATH: src
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
 
     steps:
       - checkout
@@ -32,12 +49,19 @@ jobs:
           name: Setting up Selenium
           command: |
             test -f selenium.jar || curl -O $(cat ./.circleci/selenium.link)
-            mv selenium-*.jar selenium.jar
+            mv selenium-*.jar selenium.jar || exit 0
+            test -f selenium.jar
       - save_cache:
           key: cc-selenium-{{ checksum "./.circleci/selenium.link" }}
           paths:
             - ./selenium.jar
 
+  infra:
+    environment:
+      PIPENV_VENV_IN_PROJECT: 1
+      PYTHONPATH: src
+
+    steps:
       - run:
           name: (Running Selenium)
           command: java -jar selenium.jar -log tests/functional/artifacts/selenium.log
@@ -47,12 +71,13 @@ jobs:
           command: make run
           background: true
 
+  test:
+    environment:
+      PIPENV_VENV_IN_PROJECT: 1
+      PYTHONPATH: src
+
+    steps:
       - run:
           name: Performing Tests
           command: |
             make test
-
-workflows:
-  main:
-    jobs:
-      - build-and-test
