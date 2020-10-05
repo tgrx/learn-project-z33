@@ -10,6 +10,7 @@ workflows:
 jobs:
   build-and-test:
     environment:
+      ENV_FOR_DYNACONF: ci
       PIPENV_VENV_IN_PROJECT: 1
       PYTHONPATH: src
 
