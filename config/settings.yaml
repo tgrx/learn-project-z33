@@ -14,6 +14,7 @@ default:
   DIRS_TEMPLATES:
     - src/applications/hello/templates
   PORT: 0
+  PROJECT_NAME: ""
   SECRET_KEY: ""
   TEMPLATE_ENGINE: "Django"
   VENV_SYNTHETIC: false

@@ -67,7 +67,10 @@ PROJECT_FOLDERS = list(
 
 
 def main():
-    iml = DIR_IDEA / "learn-project-z33.iml"
+    assert (
+        settings.PROJECT_NAME
+    ), "project name is not configured - look through config/"
+    iml = DIR_IDEA / f"{settings.PROJECT_NAME}.iml"
     tree = build_tree(iml)
     root = get_root(tree)
     setup_new_module_root_manager(root)

@@ -15,7 +15,6 @@ jobs:
       - restore_cache:
           keys:
             - cc-venv-{{ checksum "Pipfile.lock" }}
-            - cc-venv- # used if checksum fails
       - run:
           name: Setting up virtualenv
           command: |
@@ -29,10 +28,10 @@ jobs:
       - restore_cache:
           keys:
             - cc-selenium-{{ checksum "./.circleci/selenium.link" }}
-            - cc-selenium- # used if checksum fails
       - run:
           name: Setting up Selenium
           command: |
+            test -f selenium.jar && exit 0
             curl -O $(cat ./.circleci/selenium.link)
             mv selenium-*.jar selenium.jar
       - save_cache:
