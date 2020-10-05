@@ -8,7 +8,8 @@ workflows:
             - build-envs-01
             - docker-hub-creds
       - infra:
-          requires: build
+          requires:
+            - build
           context:
             - build-envs-01
       - test:
@@ -57,10 +58,6 @@ jobs:
             - ./selenium.jar
 
   infra:
-    environment:
-      PIPENV_VENV_IN_PROJECT: 1
-      PYTHONPATH: src
-
     steps:
       - run:
           name: (Running Selenium)
@@ -72,10 +69,6 @@ jobs:
           background: true
 
   test:
-    environment:
-      PIPENV_VENV_IN_PROJECT: 1
-      PYTHONPATH: src
-
     steps:
       - run:
           name: Performing Tests
