@@ -31,8 +31,7 @@ jobs:
       - run:
           name: Setting up Selenium
           command: |
-            test -f selenium.jar && exit 0
-            curl -O $(cat ./.circleci/selenium.link)
+            test -f selenium.jar || curl -O $(cat ./.circleci/selenium.link)
             mv selenium-*.jar selenium.jar
       - save_cache:
           key: cc-selenium-{{ checksum "./.circleci/selenium.link" }}
