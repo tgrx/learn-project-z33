@@ -1,5 +1,9 @@
 version: 2.1
 
+orbs:
+  postgres: onehq/postgres@1.1.0
+
+
 workflows:
   main:
     jobs:
@@ -21,6 +25,9 @@ jobs:
           password: $DOCKERHUB_PASSWORD
 
       - image: circleci/postgres:9.6.9-alpine
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
         environment:
           POSTGRES_DB: ci
           POSTGRES_PASSWORD: ci
