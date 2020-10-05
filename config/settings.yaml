@@ -13,19 +13,24 @@ default:
     - src
   DIRS_TEMPLATES:
     - src/applications/hello/templates
-  PORT: 0
   PROJECT_NAME: ""
   SECRET_KEY: ""
   TEMPLATE_ENGINE: "Django"
   VENV_SYNTHETIC: false
+
 
 development:
   DEBUG: true
   PORT: 8000
   SECRET_KEY: "1"
 
+
 heroku:
   ALLOWED_HOSTS:
-    - "learn-project-z33.herokuapp.com"
-  DEBUG: false
+    - "tms-project-my.herokuapp.com"
   VENV_SYNTHETIC: true
+
+
+ci:
+  DATABASE_URL: "postgres://ci:ci@localhost:5432/ci?sslmode=disable"
+  SECRET_KEY: "1"

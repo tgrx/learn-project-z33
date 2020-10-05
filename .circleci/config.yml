@@ -27,6 +27,11 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: (Waiting for Postgres to be ready)
+          command: |
+            scripts/wait_for_postgresql.sh || exit 1
+
       - restore_cache:
           keys:
             - cc-venv-{{ checksum "Pipfile.lock" }}
@@ -55,12 +60,22 @@ jobs:
             - ./selenium.jar
 
       - run:
+          name: Preparing DB
+          command: |
+            make migrate
+
+      - run:
+          name: Preparing static
+          command: |
+            make static
+
+      - run:
           name: (Running Selenium)
           command: java -jar selenium.jar -log tests/functional/artifacts/selenium.log
           background: true
       - run:
           name: (Running Local Web Server)
-          command: make migrate static run
+          command: make run
           background: true
 
       - run:
