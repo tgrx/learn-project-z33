@@ -82,13 +82,25 @@ resetdb:  dropdb createdb migrations migrate
 .PHONY: dropdb
 dropdb:
 	$(call log, dropping database)
-	psql -h localhost -U ci -d postgres -c "DROP DATABASE IF EXISTS \"$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py)\";"
+	psql \
+		--echo-all \
+		--username=$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_user.py) \
+		--no-password \
+		--host=localhost \
+		--dbname=postgres \
+		--command="DROP DATABASE IF EXISTS \"$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py)\";"
 
 
 .PHONY: createdb
 createdb:
 	$(call log, creating database)
-	psql -h localhost -U ci -d postgres -c "CREATE DATABASE \"$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py)\";"
+	psql \
+		--echo-all \
+		--username=$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_user.py) \
+		--no-password \
+		--host=localhost \
+		--dbname=postgres \
+		--command="CREATE DATABASE \"$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_name.py)\";"
 
 
 .PHONY: migrate
