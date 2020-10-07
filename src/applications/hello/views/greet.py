@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
@@ -10,15 +12,15 @@ class GreetView(FormView):
     template_name = "hello/hello.html"
 
     def form_valid(self, form):
-        self.request.session["name"] = form.cleaned_data["name"]
         self.request.session["age"] = form.cleaned_data["age"]
+        self.request.session["name"] = form.cleaned_data["name"]
 
         return super().form_valid(form)
 
     def get_initial(self):
         data = {
-            "name": self.request.session.get("name"),
             "age": self.request.session.get("age"),
+            "name": self.request.session.get("name"),
         }
 
         return data
@@ -27,6 +29,10 @@ class GreetView(FormView):
         context = super().get_context_data(**kwargs)
 
         context["name_saved"] = self.request.session.get("name") or "anon"
-        context["year"] = self.request.session.get("age")
+
+        age = self.request.session.get("age")
+        if age:
+            year = date.today().year - age
+            context["year"] = year
 
         return context
