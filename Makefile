@@ -84,7 +84,7 @@ dropdb:
 	$(call log, dropping database)
 	psql \
 		--echo-all \
-		--username=$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_user.py) \
+		--username="$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_user.py)" \
 		--no-password \
 		--host=localhost \
 		--dbname=postgres \
@@ -96,7 +96,7 @@ createdb:
 	$(call log, creating database)
 	psql \
 		--echo-all \
-		--username=$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_user.py) \
+		--username="$(shell $(PYTHON) $(DIR_SCRIPTS)/get_db_user.py)" \
 		--no-password \
 		--host=localhost \
 		--dbname=postgres \

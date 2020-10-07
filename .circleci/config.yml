@@ -15,6 +15,7 @@ jobs:
   build-and-test:
     environment:
       ENV_FOR_DYNACONF: ci
+      PGPASSWORD: ci
       PIPENV_VENV_IN_PROJECT: 1
       PYTHONPATH: src
 
@@ -29,9 +30,9 @@ jobs:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
         environment:
-          POSTGRES_DB: ci
-          POSTGRES_PASSWORD: ci
-          POSTGRES_USER: ci
+          POSTGRES_DB: $PGPASSWORD
+          POSTGRES_PASSWORD: $PGPASSWORD
+          POSTGRES_USER: $PGPASSWORD
 
     steps:
       - checkout
