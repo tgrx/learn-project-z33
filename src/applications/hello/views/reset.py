@@ -1,13 +1,14 @@
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.forms import Form
+from django.urls import reverse_lazy
+from django.views.generic import FormView
 
 
-def view_reset(request: HttpRequest) -> HttpResponse:
-    for user_attr in {"name", "age"}:
-        try:
-            del request.session[user_attr]
-        except KeyError:
-            pass
+class ResetView(FormView):
+    form_class = Form
+    http_method_names = ["post"]
+    success_url = reverse_lazy("hello:index")
 
-    return redirect("/hello")
+    def form_valid(self, form):
+        self.request.session.clear()
+
+        return super().form_valid(form)
