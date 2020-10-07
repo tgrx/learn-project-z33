@@ -28,7 +28,7 @@ class GreetView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["name_saved"] = self.request.session.get("name") or "anon"
+        context["name_saved"] = self.request.session.get("name") or "anonymous"
 
         age = self.request.session.get("age")
         if age:
