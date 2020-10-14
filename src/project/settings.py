@@ -8,11 +8,11 @@ REPO_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = REPO_DIR / "src"
 PROJECT_DIR = BASE_DIR / "project"
 
-SECRET_KEY = "47^z241-=2*_qo6z@7=1x6kq%t)5@s)#7ov_sa!7*za&i#22-!"
+SECRET_KEY = _ds.SECRET_KEY
 
-DEBUG = True
+DEBUG = _ds.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = _ds.ALLOWED_HOSTS
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -67,8 +67,6 @@ DATABASES = {
     "default": dj_database_url.parse(database_url),
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -85,8 +83,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
 
