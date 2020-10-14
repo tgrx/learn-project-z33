@@ -28,7 +28,7 @@ def validate_logo(page: MainPage):
 
 
 def validate_title(page: MainPage):
-    assert "Z33" == page.title
+    assert "Z33 :: Home page" == page.title
 
 
 def validate_content(page: MainPage):

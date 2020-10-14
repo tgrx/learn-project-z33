@@ -1,22 +1,13 @@
+{% extends "_base.html" %}
+
+
 {% load static %}
-<html>
-<head>
-  <title>Z33</title>
-  <link href="{% static 'styles/main.css' %}" rel="stylesheet" type="text/css">
-  <link href="{% static 'images/logo.svg' %}" rel="shortcut icon" type="image/svg+xml">
-</head>
-<body>
-<header>
-  <div class="flat">
-    <a href="/"><img alt="Logo" height="100rem" src="{% static 'images/logo.svg' %}"></a>
-    <a href="/"><h1>Study Project Z33</h1></a>
-  </div>
-  <nav>
-    <p><a href="{% url "home:index" %}"><span>About</span></a></p>
-    <p><a href="{% url "hello:index" %}"><span>"Hello" app</span></a></p>
-  </nav>
-</header>
-<main>
+
+
+{% block title %}Home page{% endblock %}
+
+
+{% block main %}
   <article>
     <section>
       <h2>Progress</h2>
@@ -134,15 +125,15 @@
         <div class="week">
           <p class="past">05.10</p>
           <p class="past">06.10</p>
-          <p class="lesson">07.10</p>
-          <p>08.10</p>
-          <p>09.10</p>
-          <p>10.10</p>
-          <p>11.10</p>
+          <p class="lesson past">07.10</p>
+          <p class="past">08.10</p>
+          <p class="past">09.10</p>
+          <p class="past">10.10</p>
+          <p class="past">11.10</p>
         </div>
         <div class="week">
-          <p>12.10</p>
-          <p>13.10</p>
+          <p class="past">12.10</p>
+          <p class="past">13.10</p>
           <p class="lesson">14.10</p>
           <p>15.10</p>
           <p>16.10</p>
@@ -188,6 +179,4 @@
       </div>
     </section>
   </article>
-</main>
-</body>
-</html>
+{% endblock %}

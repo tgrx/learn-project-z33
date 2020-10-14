@@ -5,6 +5,7 @@ default:
   DIRS_EXCLUDED:
     - .idea
     - .pytest_cache
+    - .static
   DIRS_RESOURCES:
     - config
     - src/applications/hello/static
@@ -14,6 +15,7 @@ default:
   DIRS_TEMPLATES:
     - src/applications/hello/templates
     - src/applications/home/templates
+    - src/project/templates
   PROJECT_NAME: ""
   SECRET_KEY: ""
   TEMPLATE_ENGINE: "Django"

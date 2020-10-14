@@ -63,7 +63,7 @@ def test_post(browser, request):
 
 
 def validate_title(page: HelloPage):
-    assert "Study Project Z33 :: Hello" == page.title
+    assert "Z33 :: Hello app" == page.title
 
 
 def validate_structure(page: HelloPage):
