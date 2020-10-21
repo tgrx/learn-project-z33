@@ -19,7 +19,7 @@ def test(browser, request):
 
 
 def validate_favicon(page: MainPage):
-    assert "s/images/logo.svg" in page.favicon.get_attribute("href")
+    assert "s/images/logo" in page.favicon.get_attribute("href")
 
 
 def validate_logo(page: MainPage):

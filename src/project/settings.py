@@ -6,20 +6,21 @@ import sentry_sdk
 from dynaconf import settings as _ds
 from sentry_sdk.integrations.django import DjangoIntegration
 
-sentry_sdk.init(
-    dsn=_ds.SENTRY_DSN,
-    integrations=[DjangoIntegration()],
-    traces_sample_rate=1.0,
-    send_default_pii=True,
-)
+DEBUG = _ds.DEBUG
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn=_ds.SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        send_default_pii=True,
+    )
 
 REPO_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = REPO_DIR / "src"
 PROJECT_DIR = BASE_DIR / "project"
 
 SECRET_KEY = _ds.SECRET_KEY
-
-DEBUG = _ds.DEBUG
 
 ALLOWED_HOSTS = _ds.ALLOWED_HOSTS + ["localhost"]
 
