@@ -59,9 +59,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "project.wsgi.application"
 
-database_url = _ds.DATABASE_URL
-if _ds.ENV_FOR_DYNACONF == "heroku":
-    database_url = os.getenv("DATABASE_URL")
+database_url = os.getenv("DATABASE_URL", _ds.DATABASE_URL)
 
 DATABASES = {
     "default": dj_database_url.parse(database_url),
