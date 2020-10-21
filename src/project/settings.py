@@ -2,7 +2,16 @@ import os
 from pathlib import Path
 
 import dj_database_url
+import sentry_sdk
 from dynaconf import settings as _ds
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn=_ds.SENTRY_DSN,
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)
 
 REPO_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = REPO_DIR / "src"
@@ -12,7 +21,7 @@ SECRET_KEY = _ds.SECRET_KEY
 
 DEBUG = _ds.DEBUG
 
-ALLOWED_HOSTS = _ds.ALLOWED_HOSTS
+ALLOWED_HOSTS = _ds.ALLOWED_HOSTS + ["localhost"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -65,7 +74,6 @@ DATABASES = {
     "default": dj_database_url.parse(database_url),
 }
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -80,7 +88,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 LANGUAGE_CODE = "en-us"
 

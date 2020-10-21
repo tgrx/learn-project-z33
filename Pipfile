@@ -19,10 +19,11 @@ delorean = "*"
 dj-database-url = "*"
 django = "*"
 dynaconf = {extras = ["yaml"], version = "*"}
+gunicorn = "*"
 jinja2 = "*"
 psycopg2-binary = "*"
+sentry-sdk = "*"
 whitenoise = "*"
-gunicorn = "*"
 
 [requires]
 python_version = "3.8"
