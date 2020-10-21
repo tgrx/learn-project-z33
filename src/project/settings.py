@@ -22,7 +22,7 @@ PROJECT_DIR = BASE_DIR / "project"
 
 SECRET_KEY = _ds.SECRET_KEY
 
-ALLOWED_HOSTS = _ds.ALLOWED_HOSTS + ["localhost"]
+ALLOWED_HOSTS = _ds.ALLOWED_HOSTS + ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",

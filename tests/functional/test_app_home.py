@@ -14,12 +14,6 @@ def test(browser, request):
     validate_title(page)
     validate_content(page)
     validate_progress(page)
-    validate_logo(page)
-
-
-def validate_logo(page: MainPage):
-    assert "svg" in page.logo
-    assert "Z33" in page.logo
 
 
 def validate_title(page: MainPage):
