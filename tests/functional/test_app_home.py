@@ -11,15 +11,10 @@ url = "http://localhost:8000"
 def test(browser, request):
     page = MainPage(browser, url)
 
-    validate_favicon(page)
     validate_title(page)
     validate_content(page)
     validate_progress(page)
     validate_logo(page)
-
-
-def validate_favicon(page: MainPage):
-    assert "s/images/logo" in page.favicon.get_attribute("href")
 
 
 def validate_logo(page: MainPage):
