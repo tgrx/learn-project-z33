@@ -1,4 +1,4 @@
-from utils import in_virtualenv
+from scripts_utils import in_virtualenv
 
 
 def main():

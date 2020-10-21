@@ -1,4 +1,4 @@
-from utils import get_db_username
+from scripts_utils import get_db_username
 
 
 def main():

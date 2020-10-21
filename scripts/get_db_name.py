@@ -1,4 +1,4 @@
-from utils import get_db_name
+from scripts_utils import get_db_name
 
 
 def main():
