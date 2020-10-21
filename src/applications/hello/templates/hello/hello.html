@@ -1,0 +1,54 @@
+{% extends "_base.html" %}
+
+
+{% load static %}
+
+
+{% block title %}Hello app{% endblock %}
+
+
+{% block head %}
+  <link href="{% static 'hello/style.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block main %}
+
+  <form action="/theme" method="post">
+    <button type="submit">Switch theme</button>
+  </form>
+  <hr>
+  <h1>Hello {{ name_saved }}!</h1>
+  {% if year %}
+    <h1>You was born at {{ year }}!</h1>
+  {% endif %}
+  <div class="c-1">
+    <form action="{% url "hello:update" %}" method="post">
+      <div class="form-grid">
+        <div class="form-field">
+          {{ form.name.label_tag }}
+          {{ form.name }}
+          {{ form.name.errors }}
+        </div>
+        <div class="form-field">
+          {{ form.age.label_tag }}
+          {{ form.age }}
+          {{ form.age.errors }}
+        </div>
+        <div class="form-field">
+          <button id="greet-button-id" type="submit">Greet</button>
+        </div>
+      </div>
+      {% csrf_token %}
+    </form>
+    <form action="{% url "hello:reset" %}" method="post">
+      <div class="form-grid">
+        <div class="form-field">
+          <button id="reset-button-id" type="submit">Reset</button>
+        </div>
+      </div>
+      {% csrf_token %}
+    </form>
+  </div>
+
+{% endblock %}
