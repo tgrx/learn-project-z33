@@ -16,7 +16,7 @@ default:
     - src/applications/hello/templates
     - src/applications/home/templates
     - src/project/templates
-  GUNICORN_TIMEOUT: -1
+  GUNICORN_TIMEOUT: 30
   PROJECT_NAME: ""
   SECRET_KEY: ""
   SENTRY_DSN: ""
