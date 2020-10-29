@@ -9,7 +9,7 @@
   {% for obj in object_list %}
     <article class="post">
       <p><span class="post-title">{{ obj.title }}</span></p>
-      <p><span class="post-content">{{ obj.content }}</span></p>
+      <p><span class="post-content">{{ obj.content|linebreaksbr }}</span></p>
       <p><span class="post-metadata">{{ obj.created_at|date:'G:i l, j E Y' }}</span></p>
     </article>
   {% endfor %}

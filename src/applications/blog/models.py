@@ -10,5 +10,9 @@ class Post(models.Model):
     visible = models.BooleanField(default=False)
 
     def __str__(self):
-        msg = f"'{self.title}', visible? {self.visible}"
+        visible = "\N{FIRE}" if self.visible else "\N{SLEEPING SYMBOL}"
+        msg = f'[{self.pk}] "{self.title}" {visible}'
         return msg
+
+    class Meta:
+        ordering = ["-created_at", "title", "pk"]
