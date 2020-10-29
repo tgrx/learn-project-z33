@@ -1,0 +1,30 @@
+.post {
+  border: orange 1px dotted;
+  display: grid;
+  grid-row-gap: 1rem;
+  grid-template-columns: 90%;
+  grid-template-rows: 10% auto 10%;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.post p {
+  margin: 0;
+  padding: 0;
+}
+
+.post-title {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+.post-metadata {
+  color: saddlebrown;
+  font-size: 80%;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.post-content {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Geneva", "Verdana", sans-serif;
+}

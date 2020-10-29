@@ -1,12 +1,16 @@
 {% extends "_base.html" %}
-
-
 {% load static %}
-
-
 {% block title %}Blog{% endblock %}
-
-
+{% block head %}
+  <link href="{% static 'blog/styles.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
 {% block main %}
-  <h1>BLOG</h1>
+  <h1>BRED</h1>
+  {% for obj in object_list %}
+    <article class="post">
+      <p><span class="post-title">{{ obj.title }}</span></p>
+      <p><span class="post-content">{{ obj.content }}</span></p>
+      <p><span class="post-metadata">{{ obj.created_at|date:'G:i l, j E Y' }}</span></p>
+    </article>
+  {% endfor %}
 {% endblock %}
