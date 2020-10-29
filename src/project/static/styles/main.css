@@ -33,11 +33,6 @@ nav p {
   text-align: center;
 }
 
-/*nav p::after {*/
-/*  content: " | ";*/
-/*  margin-left: 25%;*/
-/*}*/
-
 nav p:last-of-type {
   border-right: 0;
 }
