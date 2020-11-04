@@ -2,10 +2,20 @@
   border: orange 1px dotted;
   display: grid;
   grid-row-gap: 1rem;
-  grid-template-columns: 90%;
+  grid-template-columns: 90% 10%;
   grid-template-rows: 10% auto 10%;
   margin-bottom: 2rem;
   padding: 1rem;
+}
+
+.post .post-data {
+  grid-column: 1/2;
+  grid-row: 1/4;
+}
+
+.post .post-controls {
+  grid-column: 2/3;
+  grid-row: 1/2;
 }
 
 .post p {
@@ -28,4 +38,8 @@
 .post-content {
   font-family: "Lucida Grande", "Lucida Sans Unicode", "Geneva", "Verdana", sans-serif;
   font-size: 80%;
+}
+
+.post-control {
+  padding: 0.4rem;
 }

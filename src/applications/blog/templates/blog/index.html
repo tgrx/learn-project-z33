@@ -1,19 +1,18 @@
-{% extends "_base.html" %}
+{% extends "blog/_base.html" %}
 {% load static %}
-{% block title %}Blog{% endblock %}
-{% block head %}
-  <link href="{% static 'blog/styles.css' %}" rel="stylesheet" type="text/css">
-{% endblock %}
-{% block main %}
-  <h1>BRED</h1>
+{% block blog %}
   <p><a href="{% url 'blog:new-post' %}">Create new</a></p>
   {% for obj in object_list %}
     <article class="post">
-      <p><span class="post-title">{{ obj.title }}</span></p>
-      <p><span class="post-content">{{ obj.content|linebreaksbr }}</span></p>
-      <p><span class="post-metadata">{{ obj.created_at|date:'G:i l, j E Y' }}</span></p>
-      <p><a href="">[update]</a></p>
-      <p><a href="{% url 'blog:delete-post' obj.pk %}">[delete]</a></p>
+      <div class="post-data">
+        <p><span class="post-title">{{ obj.title }}</span></p>
+        <p><span class="post-content">{{ obj.content|linebreaksbr }}</span></p>
+        <p><span class="post-metadata">{{ obj.created_at|date:'G:i l, j E Y' }}</span></p>
+      </div>
+      <div class="post-controls">
+        <a href=""><span class="post-control">✏️</span></a>
+        <a href="{% url 'blog:delete-post' obj.pk %}"><span class="post-control">🗑</span></a>
+      </div>
     </article>
   {% endfor %}
 {% endblock %}
