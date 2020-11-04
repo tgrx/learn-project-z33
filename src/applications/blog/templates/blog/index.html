@@ -10,7 +10,7 @@
         <p><span class="post-metadata">{{ obj.created_at|date:'G:i l, j E Y' }}</span></p>
       </div>
       <div class="post-controls">
-        <a href=""><span class="post-control">✏️</span></a>
+        <a href="{% url 'blog:update-post' obj.pk %}"><span class="post-control">✏️</span></a>
         <a href="{% url 'blog:delete-post' obj.pk %}"><span class="post-control">🗑</span></a>
       </div>
     </article>

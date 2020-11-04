@@ -8,3 +8,4 @@ class NewPostView(CreateView):
     fields = "__all__"
     model = Post
     success_url = reverse_lazy("blog:index")
+    extra_context = {"action_name": "Create Post"}

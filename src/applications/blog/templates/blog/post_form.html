@@ -5,6 +5,6 @@
   <form action="{% url 'blog:new-post' %}" method="post">
     {{ form.as_p }}
     {% csrf_token %}
-    <button type="submit">Create new post</button>
+    <button type="submit">{{ action_name }}</button>
   </form>
 {% endblock %}
