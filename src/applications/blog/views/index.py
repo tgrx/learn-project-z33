@@ -4,5 +4,5 @@ from applications.blog.models import Post
 
 
 class IndexView(ListView):
-    template_name = "blog/index.html"
     queryset = Post.objects.filter(visible=True)
+    template_name = "blog/index.html"

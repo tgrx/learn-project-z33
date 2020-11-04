@@ -12,6 +12,8 @@
       <p><span class="post-title">{{ obj.title }}</span></p>
       <p><span class="post-content">{{ obj.content|linebreaksbr }}</span></p>
       <p><span class="post-metadata">{{ obj.created_at|date:'G:i l, j E Y' }}</span></p>
+      <p><a href="">[update]</a></p>
+      <p><a href="{% url 'blog:delete-post' obj.pk %}">[delete]</a></p>
     </article>
   {% endfor %}
 {% endblock %}
