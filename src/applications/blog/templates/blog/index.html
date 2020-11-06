@@ -5,13 +5,13 @@
   {% for obj in object_list %}
     <article class="post">
       <div class="post-data">
-        <p><span class="post-title">{{ obj.title }}</span></p>
-        <p><span class="post-content">{{ obj.content|linebreaksbr }}</span></p>
+        <p><a href="{{ obj.get_absolute_url }}"><span class="post-title">{{ obj.title }}</span></a></p>
+        <p><span class="post-content">{{ obj.content|truncatewords:4 }}</span></p>
         <p><span class="post-metadata">{{ obj.created_at|date:'G:i l, j E Y' }}</span></p>
       </div>
       <div class="post-controls">
-        <a href="{% url 'blog:update-post' obj.pk %}"><span class="post-control">✏️</span></a>
-        <a href="{% url 'blog:delete-post' obj.pk %}"><span class="post-control">🗑</span></a>
+        <a href="{{ obj.get_absolute_url }}update/"><span class="post-control">✏️</span></a>
+        <a href="{{ obj.get_absolute_url }}delete/"><span class="post-control">🗑</span></a>
       </div>
     </article>
   {% endfor %}
