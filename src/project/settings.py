@@ -22,7 +22,9 @@ PROJECT_DIR = BASE_DIR / "project"
 
 SECRET_KEY = _ds.SECRET_KEY
 
-ALLOWED_HOSTS = _ds.ALLOWED_HOSTS + ["localhost", "127.0.0.1"]
+HOST = _ds.HOST
+
+ALLOWED_HOSTS = list(set(_ds.ALLOWED_HOSTS + ["localhost", "127.0.0.1", HOST]))
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -33,6 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # -------------------------
     "applications.blog.apps.BlogConfig",
+    "applications.bots.apps.BotsConfig",
     "applications.hello.apps.HelloConfig",
     "applications.home.apps.HomeConfig",
 ]
@@ -108,3 +111,5 @@ STATICFILES_DIRS = [
 STATIC_ROOT = REPO_DIR / ".static"
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+TG_BOT_TOKEN = _ds.TG_BOT_TOKEN
