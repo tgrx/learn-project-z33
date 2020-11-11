@@ -8,15 +8,18 @@ default:
     - .static
   DIRS_RESOURCES:
     - config
+    - src/applications/blog/static
     - src/applications/hello/static
     - src/project/static
   DIRS_SOURCES:
     - src
   DIRS_TEMPLATES:
+    - src/applications/blog/templates
     - src/applications/hello/templates
     - src/applications/home/templates
     - src/project/templates
   GUNICORN_TIMEOUT: 30
+  PORT: -1
   PROJECT_NAME: ""
   SECRET_KEY: ""
   SENTRY_DSN: ""

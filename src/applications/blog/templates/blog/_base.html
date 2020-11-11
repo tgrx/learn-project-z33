@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Blog{% endblock %}
+{% block head %}
+  <link href="{% static 'blog/styles.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block main %}
+  <a href="{% url 'blog:index' %}"><h1>BRED</h1></a>
+  {% block blog %}
+  {% endblock %}
+{% endblock %}

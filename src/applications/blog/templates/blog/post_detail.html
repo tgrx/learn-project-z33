@@ -1,0 +1,16 @@
+{% extends "blog/_base.html" %}
+{% load static %}
+{% block title %}{{ object.title }}{% endblock %}
+{% block blog %}
+  <article class="post">
+    <div class="post-data">
+      <p><span class="post-title">{{ object.title }}</span></p>
+      <p><span class="post-content">{{ object.content|linebreaksbr }}</span></p>
+      <p><span class="post-metadata">{{ object.created_at|date:'G:i l, j E Y' }}</span></p>
+    </div>
+    <div class="post-controls">
+      <a href="{% url 'blog:update-post' object.pk %}"><span class="post-control">✏️</span></a>
+      <a href="{% url 'blog:delete-post' object.pk %}"><span class="post-control">🗑</span></a>
+    </div>
+  </article>
+{% endblock %}

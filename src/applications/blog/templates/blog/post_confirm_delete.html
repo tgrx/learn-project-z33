@@ -1,0 +1,19 @@
+{% extends "blog/_base.html" %}
+{% load static %}
+{% block title %}Delete Post{% endblock %}
+{% block blog %}
+  <p>Are you sure to delete this?</p>
+  <article class="post">
+    <div class="post-data">
+      <p><span class="post-title">{{ object.title }}</span></p>
+      <p><span class="post-content">{{ object.content|linebreaksbr }}</span></p>
+      <p><span class="post-metadata">{{ object.created_at|date:'G:i l, j E Y' }}</span></p>
+    </div>
+    <div class="post-controls">
+      <form action="{% url 'blog:delete-post' object.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+      </form>
+    </div>
+  </article>
+{% endblock %}
