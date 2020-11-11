@@ -25,6 +25,7 @@ jinja2 = "*"
 psycopg2-binary = "*"
 sentry-sdk = "*"
 whitenoise = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
